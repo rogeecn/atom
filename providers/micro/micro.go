@@ -1,9 +1,9 @@
 package micro
 
 import (
-	"app/container"
-	"app/providers/config"
-	"app/utils"
+	"atom/container"
+	"atom/providers/config"
+	"atom/utils"
 	"log"
 
 	mgrpc "github.com/go-micro/plugins/v4/client/grpc"

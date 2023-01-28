@@ -3,8 +3,8 @@ package rpc
 import (
 	"log"
 
-	"app/container"
-	"app/proto"
+	"atom/container"
+	"atom/proto"
 
 	"go-micro.dev/v4"
 )

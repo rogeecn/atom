@@ -1,9 +1,9 @@
 package http
 
 import (
-	"app/container"
-	"app/providers/config"
-	"app/providers/logger"
+	"atom/container"
+	"atom/providers/config"
+	"atom/providers/logger"
 	"fmt"
 	"log"
 	"time"

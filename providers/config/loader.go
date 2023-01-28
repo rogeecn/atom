@@ -1,8 +1,8 @@
 package config
 
 import (
-	"app/container"
-	"app/utils"
+	"atom/container"
+	"atom/utils"
 	"log"
 	"os"
 	"strings"

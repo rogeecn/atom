@@ -1,12 +1,12 @@
 package http
 
 import (
-	_ "app/modules"
+	_ "atom/modules"
 
-	"app/contracts"
-	"app/providers/config"
-	"app/providers/http"
-	"app/providers/logger"
+	"atom/contracts"
+	"atom/providers/config"
+	"atom/providers/http"
+	"atom/providers/logger"
 
 	"go.uber.org/dig"
 )

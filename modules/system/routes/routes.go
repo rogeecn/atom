@@ -1,9 +1,9 @@
 package routes
 
 import (
-	"app/contracts"
-	"app/modules/system/controller"
-	"app/providers/http"
+	"atom/contracts"
+	"atom/modules/system/controller"
+	"atom/providers/http"
 
 	"github.com/rogeecn/gen"
 )

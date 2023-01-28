@@ -1,8 +1,8 @@
 package service
 
 import (
-	"app/modules/system/dao"
-	"app/modules/system/dto"
+	"atom/modules/system/dao"
+	"atom/modules/system/dto"
 	"context"
 )
 

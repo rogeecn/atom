@@ -1,11 +1,11 @@
 package container
 
 import (
-	"app/container"
-	"app/modules/system/controller"
-	"app/modules/system/dao"
-	"app/modules/system/routes"
-	"app/modules/system/service"
+	"atom/container"
+	"atom/modules/system/controller"
+	"atom/modules/system/dao"
+	"atom/modules/system/routes"
+	"atom/modules/system/service"
 	"log"
 
 	"go.uber.org/dig"

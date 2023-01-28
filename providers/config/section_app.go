@@ -1,6 +1,6 @@
 package config
 
-import "app/utils"
+import "atom/utils"
 
 type App struct {
 	Mode string

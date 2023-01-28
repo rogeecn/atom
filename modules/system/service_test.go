@@ -1,16 +1,16 @@
 package system
 
 import (
-	"app/container"
+	"atom/container"
 	"context"
 	"fmt"
 	"testing"
 
-	_ "app/providers/config" // 这里的依赖需要被导入，否则会报错
-	_ "app/providers/logger"
-	_ "app/providers/mysql"
-	_ "app/web/system/container"
-	"app/web/system/service"
+	_ "atom/modules/system/container"
+	"atom/modules/system/service"
+	_ "atom/providers/config" // 这里的依赖需要被导入，否则会报错
+	_ "atom/providers/logger"
+	_ "atom/providers/mysql"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
@@ -45,7 +45,7 @@ func (s *TServiceSuite) Test_GetName() {
 	assert.Equal(s.T(), "System.GetName", name.Name)
 }
 
-//////
+// ////
 func (s *TServiceSuite) SetupSuite() {
 	fmt.Println("SetupSuite")
 }

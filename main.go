@@ -1,7 +1,7 @@
 package main
 
 import (
-	"app/cmd"
+	"atom/cmd"
 )
 
 func main() {

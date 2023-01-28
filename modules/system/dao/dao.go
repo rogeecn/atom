@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"app/providers/config"
+	"atom/providers/config"
 	"context"
 	"errors"
 

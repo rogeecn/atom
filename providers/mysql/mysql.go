@@ -1,7 +1,7 @@
 package mysql
 
 import (
-	"app/container"
+	"atom/container"
 
 	"gorm.io/gorm"
 )

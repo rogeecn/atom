@@ -1,8 +1,8 @@
 package logger
 
 import (
-	"app/container"
-	"app/providers/config"
+	"atom/container"
+	"atom/providers/config"
 	"log"
 	"strings"
 

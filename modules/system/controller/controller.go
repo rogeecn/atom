@@ -1,10 +1,10 @@
 package controller
 
 import (
-	"app/modules/system/dao"
-	"app/modules/system/dto"
-	"app/modules/system/service"
-	"app/providers/config"
+	"atom/modules/system/dao"
+	"atom/modules/system/dto"
+	"atom/modules/system/service"
+	"atom/providers/config"
 
 	"github.com/gin-gonic/gin"
 )

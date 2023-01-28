@@ -1,11 +1,11 @@
 package cmd
 
 import (
-	_ "app/providers"
+	_ "atom/providers"
 
-	"app/container"
-	"app/services/http"
-	"app/utils"
+	"atom/container"
+	"atom/services/http"
+	"atom/utils"
 	"fmt"
 	"os"
 
