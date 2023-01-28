@@ -1,14 +1,14 @@
 package dao
 
 import (
-	"app/container"
+	"atom/container"
 	"context"
 	"testing"
 
-	"app/providers/config"
-	_ "app/providers/httpsvc"
-	_ "app/providers/logger"
-	_ "app/providers/mysql"
+	"atom/providers/config"
+	_ "atom/providers/http"
+	_ "atom/providers/logger"
+	_ "atom/providers/mysql"
 
 	"go.uber.org/dig"
 	"gorm.io/gorm"
