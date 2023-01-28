@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 func init() {
@@ -32,8 +33,8 @@ func (e *Service) Serve() error {
 func NewService(log *logger.Logger, cfg *config.Config) *Service {
 	log.Info("init http service with gin...")
 
-	gin.DefaultWriter = &logger.LevelWriter{Logger: log, Level: "info"}
-	gin.DefaultErrorWriter = &logger.LevelWriter{Logger: log, Level: "error"}
+	gin.DefaultWriter = &logger.LevelWriter{Logger: log, Level: zap.InfoLevel}
+	gin.DefaultErrorWriter = &logger.LevelWriter{Logger: log, Level: zap.ErrorLevel}
 
 	if cfg.App.IsDebug() {
 		gin.SetMode(gin.DebugMode)

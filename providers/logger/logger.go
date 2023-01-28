@@ -6,23 +6,9 @@ import (
 	"log"
 	"strings"
 
-	"github.com/go-micro/plugins/v4/logger/zap"
-	"go-micro.dev/v4/logger"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
-
-type Logger struct {
-}
-
-type LevelWriter struct {
-	Logger logger.Logger
-	Level  string
-}
-
-func (w LevelWriter) Write(p []byte) (n int, err error) {
-	level, _ := logger.GetLevel(w.Level)
-	w.Logger.Logf(level, strings.TrimSpace(string(p)))
-	return len(p), nil
-}
 
 func init() {
 	if err := container.Container.Provide(NewLogger); err != nil {
@@ -30,72 +16,155 @@ func init() {
 	}
 }
 
+type Logger struct {
+	logger *zap.SugaredLogger
+}
+
+type LevelWriter struct {
+	Logger *Logger
+	Level  zapcore.Level
+}
+
+func (w LevelWriter) Write(p []byte) (n int, err error) {
+	str := strings.TrimSpace(string(p))
+	switch w.Level {
+	case zapcore.InfoLevel:
+		w.Logger.Info(str)
+	case zapcore.ErrorLevel:
+		w.Logger.Info(str)
+	}
+	return len(p), nil
+}
+
 func NewLogger(conf *config.Config) (*Logger, error) {
-	zapLogger, err := zap.NewLogger()
+	logger, err := zap.NewDevelopment()
 	if err != nil {
 		return nil, err
 	}
-	logger.DefaultLogger = zapLogger
 
-	return &Logger{}, nil
+	return &Logger{logger: logger.Sugar()}, nil
 }
 
-func (l *Logger) Init(options ...logger.Option) error                { panic("do not use") }
-func (l *Logger) Options() logger.Options                            { panic("do not use") }
-func (l *Logger) Fields(fields map[string]interface{}) logger.Logger { panic("do not use") }
-func (l *Logger) String() string                                     { panic("do not use") }
-
-func (l *Logger) Logf(level logger.Level, format string, v ...interface{}) {
-	logger.Logf(level, format, v...)
-}
-func (l *Logger) Log(level logger.Level, v ...interface{}) {
-	logger.Log(level, v...)
-}
-
-func (l *Logger) Info(args ...interface{}) {
-	logger.Log(logger.InfoLevel, args...)
-}
-
-func (l *Logger) Infof(template string, args ...interface{}) {
-	logger.Logf(logger.InfoLevel, template, args...)
-}
-
-func (l *Logger) Trace(args ...interface{}) {
-	logger.Log(logger.TraceLevel, args...)
-}
-
-func (l *Logger) Tracef(template string, args ...interface{}) {
-	logger.Logf(logger.TraceLevel, template, args...)
-}
-
+// Debug uses fmt.Sprint to construct and log a message.
 func (l *Logger) Debug(args ...interface{}) {
-	logger.Log(logger.DebugLevel, args...)
+	l.logger.Debug(args...)
 }
 
-func (l *Logger) Debugf(template string, args ...interface{}) {
-	logger.Logf(logger.DebugLevel, template, args...)
+// Info uses fmt.Sprint to construct and log a message.
+func (l *Logger) Info(args ...interface{}) {
+	l.logger.Info(args...)
 }
 
+// Warn uses fmt.Sprint to construct and log a message.
 func (l *Logger) Warn(args ...interface{}) {
-	logger.Log(logger.WarnLevel, args...)
+	l.logger.Warn(args...)
 }
 
-func (l *Logger) Warnf(template string, args ...interface{}) {
-	logger.Logf(logger.WarnLevel, template, args...)
-}
-
+// Error uses fmt.Sprint to construct and log a message.
 func (l *Logger) Error(args ...interface{}) {
-	logger.Log(logger.ErrorLevel, args...)
+	l.logger.Error(args...)
 }
 
-func (l *Logger) Errorf(template string, args ...interface{}) {
-	logger.Logf(logger.ErrorLevel, template, args...)
+// DPanic uses fmt.Sprint to construct and log a message. In development, the
+// logger then panics. (See DPanicLevel for details.)
+func (l *Logger) DPanic(args ...interface{}) {
+	l.logger.DPanic(args...)
 }
 
+// Panic uses fmt.Sprint to construct and log a message, then panics.
+func (l *Logger) Panic(args ...interface{}) {
+	l.logger.Panic(args...)
+}
+
+// Fatal uses fmt.Sprint to construct and log a message, then calls os.Exit.
 func (l *Logger) Fatal(args ...interface{}) {
-	logger.Log(logger.FatalLevel, args...)
+	l.logger.Fatal(args...)
 }
 
+// Debugf uses fmt.Sprintf to log a templated message.
+func (l *Logger) Debugf(template string, args ...interface{}) {
+	l.logger.Debugf(template, args...)
+}
+
+// Infof uses fmt.Sprintf to log a templated message.
+func (l *Logger) Infof(template string, args ...interface{}) {
+	l.logger.Infof(template, args...)
+}
+
+// Warnf uses fmt.Sprintf to log a templated message.
+func (l *Logger) Warnf(template string, args ...interface{}) {
+	l.logger.Warnf(template, args...)
+}
+
+// Errorf uses fmt.Sprintf to log a templated message.
+func (l *Logger) Errorf(template string, args ...interface{}) {
+	l.logger.Errorf(template, args...)
+}
+
+// DPanicf uses fmt.Sprintf to log a templated message. In development, the
+// logger then panics. (See DPanicLevel for details.)
+func (l *Logger) DPanicf(template string, args ...interface{}) {
+	l.logger.DPanicf(template, args...)
+}
+
+// Panicf uses fmt.Sprintf to log a templated message, then panics.
+func (l *Logger) Panicf(template string, args ...interface{}) {
+	l.logger.Panicf(template, args...)
+}
+
+// Fatalf uses fmt.Sprintf to log a templated message, then calls os.Exit.
 func (l *Logger) Fatalf(template string, args ...interface{}) {
-	logger.Logf(logger.FatalLevel, template, args...)
+	l.logger.Fatalf(template, args...)
+}
+
+// Debugw logs a message with some additional context. The variadic key-value
+// pairs are treated as they are in With.
+//
+// When debug-level logging is disabled, this is much faster than
+//
+//	s.With(keysAndValues).Debug(msg)
+func (l *Logger) Debugw(msg string, keysAndValues ...interface{}) {
+	l.logger.Debugw(msg, keysAndValues...)
+}
+
+// Infow logs a message with some additional context. The variadic key-value
+// pairs are treated as they are in With.
+func (l *Logger) Infow(msg string, keysAndValues ...interface{}) {
+	l.logger.Infow(msg, keysAndValues...)
+}
+
+// Warnw logs a message with some additional context. The variadic key-value
+// pairs are treated as they are in With.
+func (l *Logger) Warnw(msg string, keysAndValues ...interface{}) {
+	l.logger.Warnw(msg, keysAndValues...)
+}
+
+// Errorw logs a message with some additional context. The variadic key-value
+// pairs are treated as they are in With.
+func (l *Logger) Errorw(msg string, keysAndValues ...interface{}) {
+	l.logger.Errorw(msg, keysAndValues...)
+}
+
+// DPanicw logs a message with some additional context. In development, the
+// logger then panics. (See DPanicLevel for details.) The variadic key-value
+// pairs are treated as they are in With.
+func (l *Logger) DPanicw(msg string, keysAndValues ...interface{}) {
+	l.logger.DPanicw(msg, keysAndValues...)
+}
+
+// Panicw logs a message with some additional context, then panics. The
+// variadic key-value pairs are treated as they are in With.
+func (l *Logger) Panicw(msg string, keysAndValues ...interface{}) {
+	l.logger.Panicw(msg, keysAndValues...)
+}
+
+// Fatalw logs a message with some additional context, then calls os.Exit. The
+// variadic key-value pairs are treated as they are in With.
+func (l *Logger) Fatalw(msg string, keysAndValues ...interface{}) {
+	l.logger.Fatalw(msg, keysAndValues...)
+}
+
+// Sync flushes any buffered log entries.
+func (l *Logger) Sync() error {
+	return l.logger.Sync()
 }
