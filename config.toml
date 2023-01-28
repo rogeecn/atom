@@ -1,0 +1,12 @@
+[App]
+Mode = "debug"
+
+[Http]
+Static = "./dist"
+Https = false
+HttpsCert = ""
+HttpKey = ""
+Port = 8088
+
+[Log]
+Level = "debug"
