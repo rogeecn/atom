@@ -35,7 +35,7 @@ var genCmd = &cobra.Command{
 		return container.Container.Invoke(func(gq GenQueryGenerator) error {
 			g := gen.NewGenerator(gen.Config{
 				OutPath: "providers/query",
-				Mode:    gen.WithoutContext | gen.WithDefaultQuery | gen.WithQueryInterface, // generate mode
+				Mode:    gen.WithDefaultQuery | gen.WithQueryInterface, // generate mode
 			})
 
 			g.UseDB(gq.DB) // reuse your gorm db

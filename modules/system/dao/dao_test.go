@@ -6,9 +6,9 @@ import (
 	"testing"
 
 	"atom/providers/config"
+	_ "atom/providers/database"
 	_ "atom/providers/http"
 	_ "atom/providers/logger"
-	_ "atom/providers/mysql"
 
 	"go.uber.org/dig"
 	"gorm.io/gorm"
