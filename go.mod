@@ -17,8 +17,9 @@ require (
 	go.uber.org/dig v1.15.0
 	go.uber.org/zap v1.21.0
 	google.golang.org/protobuf v1.28.1
-	gorm.io/driver/mysql v1.3.3
-	gorm.io/gorm v1.23.8
+	gorm.io/driver/mysql v1.4.0
+	gorm.io/gen v0.3.19
+	gorm.io/gorm v1.24.0
 )
 
 require (
@@ -77,7 +78,7 @@ require (
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
-	golang.org/x/crypto v0.0.0-20220722155217-630584e8d5aa // indirect
+	golang.org/x/crypto v0.0.0-20221005025214-4161e89ecf1b // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
 	golang.org/x/net v0.4.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
@@ -91,4 +92,7 @@ require (
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+	gorm.io/datatypes v1.0.7 // indirect
+	gorm.io/hints v1.1.0 // indirect
+	gorm.io/plugin/dbresolver v1.3.0 // indirect
 )
