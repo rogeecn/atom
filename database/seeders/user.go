@@ -33,23 +33,20 @@ type User struct {
 	Status   bool
 }
 
-func (s *UserSeeder) Times() uint {
-	return 10
-}
-
 func (s *UserSeeder) Run(db *gorm.DB) {
-	var i uint
-	for i = 0; i < s.Times(); i++ {
+	times := 10
+	for i := 0; i < times; i++ {
 		data := s.Generate(i)
-		db.Table(s.Table()).Create(&data)
+		if i == 0 {
+			stmt := &gorm.Statement{DB: db}
+			_ = stmt.Parse(&data)
+			log.Printf("seeding %s for %d times", stmt.Schema.Table, times)
+		}
+		db.Create(&data)
 	}
 }
 
-func (s *UserSeeder) Table() string {
-	return "users"
-}
-
-func (s *UserSeeder) Generate(idx uint) User {
+func (s *UserSeeder) Generate(idx int) User {
 	return User{
 		Username: fmt.Sprintf("username: %d", idx),
 		Password: fmt.Sprintf("password: %d", idx),

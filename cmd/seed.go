@@ -29,7 +29,6 @@ var seedCmd = &cobra.Command{
 			}
 
 			for _, seeder := range seedersContainer.Seeders {
-				log.Printf("seed table (%s) for %d times", seeder.Table(), seeder.Times())
 				seeder.Run(seedersContainer.DB)
 			}
 			return nil
