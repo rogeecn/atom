@@ -4,7 +4,6 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"atom/cmd/model"
 	"atom/container"
 
 	"github.com/spf13/cobra"
@@ -41,7 +40,7 @@ var genCmd = &cobra.Command{
 			g.UseDB(gq.DB) // reuse your gorm db
 
 			// Generate basic type-safe DAO API for struct `model.User` following conventions
-			g.ApplyBasic(model.User{})
+			g.ApplyBasic()
 
 			// Generate Type Safe API with Dynamic SQL defined on Querier interface for `model.User` and `model.Company`
 			// g.ApplyInterface(func(Querier) {}, model.User{}, model.Company{})
