@@ -4,28 +4,19 @@ import (
 	"atom/container"
 	"atom/utils"
 	"log"
-	"os"
-	"strings"
-	"time"
 
-	"github.com/go-micro/plugins/v4/config/encoder/toml"
-	"github.com/go-micro/plugins/v4/config/source/etcd"
+	"github.com/pkg/errors"
 	"github.com/rogeecn/fabfile"
-	"go-micro.dev/v4/config"
-	"go-micro.dev/v4/config/reader"
-	"go-micro.dev/v4/config/reader/json"
-	"go-micro.dev/v4/config/source"
-	"go-micro.dev/v4/config/source/env"
-	"go-micro.dev/v4/config/source/file"
-	"go-micro.dev/v4/logger"
+	"github.com/spf13/viper"
 )
 
 var c *Config
 
 type Config struct {
-	App  App
-	Http Http
-	Log  Log
+	App      App
+	Http     Http
+	Log      Log
+	Database Database
 }
 
 func init() {
@@ -44,57 +35,20 @@ func Load() (*Config, error) {
 		}
 	}
 
-	options := []config.Option{}
-
-	options = append(options, config.WithSource(file.NewSource(
-		file.WithPath(confFile),
-		source.WithEncoder(toml.NewEncoder()),
-	)))
-
-	etcdEndpoints := etcdEndpoints()
-	if len(etcdEndpoints) > 0 {
-		logger.Info("etcd endpoints: ", etcdEndpoints, len(etcdEndpoints))
-		options = append(options, config.WithSource(etcd.NewSource(
-			etcd.WithAddress(etcdEndpoints...),
-			etcd.WithPrefix("/micro/config/api.web"),
-			etcd.StripPrefix(true),
-		)))
+	viper.SetConfigName(confFile) // name of config file (without extension)
+	viper.SetConfigType("toml")   // REQUIRED if the config file does not have the extension in the name
+	viper.AddConfigPath("$HOME/") // call multiple times to add many search paths
+	viper.AddConfigPath(".")      // optionally look for config in the working directory
+	// Find and read the config file
+	if err := viper.ReadInConfig(); err != nil { // Handle errors reading the config file
+		return nil, errors.Wrapf(err, "read config failed, %s", confFile)
 	}
 
-	options = append(options, config.WithSource(env.NewSource()))
-
-	options = append(options, config.WithReader(json.NewReader(reader.WithEncoder(toml.NewEncoder()))))
-
-	conf, err := config.NewConfig(options...)
-	if err != nil {
-		return nil, err
+	config := &Config{}
+	if err := viper.Unmarshal(&config); err != nil {
+		return nil, errors.Wrapf(err, "unmarshal data failed, %s", confFile)
 	}
 
-	if err := conf.Scan(&c); err != nil {
-		return nil, err
-	}
+	return config, nil
 
-	go func() {
-		ticker := time.NewTicker(time.Second * 10)
-		defer ticker.Stop()
-
-		for range ticker.C {
-			if err := conf.Scan(&c); err != nil {
-				logger.Fatal(err)
-			}
-		}
-	}()
-	return c, nil
-}
-
-func etcdEndpoints() []string {
-	var endpoints []string
-	envVars := strings.Split(os.Getenv("ETCD_ENDPOINTS"), ",")
-	for _, env := range envVars {
-		if strings.TrimSpace(env) == "" {
-			continue
-		}
-		endpoints = append(endpoints, strings.TrimSpace(env))
-	}
-	return endpoints
 }

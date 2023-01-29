@@ -1,12 +1,12 @@
 package cmd
 
 import (
+	"log"
 	"sort"
 
 	// init dependencies
 	_ "atom/database/migrations"
 	_ "atom/providers"
-	"atom/providers/logger"
 
 	"atom/container"
 	"atom/contracts"
@@ -52,14 +52,14 @@ var migrateUpCmd = &cobra.Command{
 			m := gormigrate.New(mi.DB, gormigrate.DefaultOptions, sortedMigrations(mi.Migrations))
 
 			if len(migrateToId) > 0 {
-				logger.Infof("migrate up to [%s]", migrateToId)
+				log.Printf("migrate up to [%s]\n", migrateToId)
 				return m.MigrateTo(migrateToId)
 			}
 			return m.Migrate()
 		})
 	},
 	PostRun: func(cmd *cobra.Command, args []string) {
-		logger.Info("BINGO! migrate up done")
+		log.Println("BINGO! migrate up done")
 	},
 }
 
@@ -73,14 +73,14 @@ var migrateDownCmd = &cobra.Command{
 			m := gormigrate.New(mi.DB, gormigrate.DefaultOptions, sortedMigrations(mi.Migrations))
 
 			if len(migrateToId) > 0 {
-				logger.Infof("migrate down to [%s]", migrateToId)
+				log.Printf("migrate down to [%s]\n", migrateToId)
 				return m.RollbackTo(migrateToId)
 			}
 			return m.RollbackLast()
 		})
 	},
 	PostRun: func(cmd *cobra.Command, args []string) {
-		logger.Info("BINGO! migrate down done")
+		log.Println("BINGO! migrate down done")
 	},
 }
 

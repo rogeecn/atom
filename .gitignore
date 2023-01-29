@@ -3,3 +3,4 @@ __debug_bin
 .vscode
 .idea
 tmp/
+docker-compose.yml

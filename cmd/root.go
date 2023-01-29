@@ -14,8 +14,8 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:     "app",
-	Short:   "app",
+	Use:     "atom",
+	Short:   "atom",
 	Long:    `the app long description`,
 	Version: fmt.Sprintf("\nVersion: %s\nGitHash: %s\nBuildAt: %s\n", utils.Version, utils.GitHash, utils.BuildAt),
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {

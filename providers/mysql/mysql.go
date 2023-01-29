@@ -2,14 +2,29 @@ package mysql
 
 import (
 	"atom/container"
+	"atom/providers/config"
+	"atom/providers/logger"
+	"database/sql"
 
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 func init() {
-	container.Container.Provide(NewMysqlConnection)
+	if err := container.Container.Provide(NewMysqlConnection); err != nil {
+		logger.Fatal(err)
+	}
 }
 
-func NewMysqlConnection() (*gorm.DB, error) {
-	return nil, nil
+func NewMysqlConnection(config *config.Config) (*gorm.DB, error) {
+	sqlDB, err := sql.Open("mysql", config.Database.MySQL.DSN())
+	if err != nil {
+		return nil, err
+	}
+
+	gormDB, err := gorm.Open(mysql.New(mysql.Config{
+		Conn: sqlDB,
+	}), &gorm.Config{})
+
+	return gormDB, err
 }

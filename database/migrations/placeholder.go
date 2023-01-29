@@ -20,7 +20,7 @@ type Migration20140202Init struct {
 }
 
 func New20140202InitMigration() contracts.Migration {
-	return &Migration20140202Init{id: "20140202_init"}
+	return &Migration20140202Init{id: "20140202_package_placeholder"}
 }
 
 func (m *Migration20140202Init) ID() string {
@@ -28,18 +28,9 @@ func (m *Migration20140202Init) ID() string {
 }
 
 func (m *Migration20140202Init) Up(tx *gorm.DB) error {
-	table := m.table()
-	return tx.AutoMigrate(&table)
+	return nil
 }
 
 func (m *Migration20140202Init) Down(tx *gorm.DB) error {
-	return tx.Migrator().DropTable(m.table())
-}
-
-func (m *Migration20140202Init) table() interface{} {
-	type TableName struct {
-		FieldName string
-	}
-
-	return TableName{}
+	return nil
 }
