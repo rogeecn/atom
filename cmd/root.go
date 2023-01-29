@@ -2,6 +2,7 @@ package cmd
 
 import (
 	_ "atom/providers"
+	"log"
 
 	"atom/container"
 	"atom/services/http"
@@ -18,7 +19,7 @@ var rootCmd = &cobra.Command{
 	Long:    `the app long description`,
 	Version: fmt.Sprintf("\nVersion: %s\nGitHash: %s\nBuildAt: %s\n", utils.Version, utils.GitHash, utils.BuildAt),
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		// fmt.Println("using config file: ", utils.ShareConfigFile)
+		log.Println("using config file: ", utils.ShareConfigFile)
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return container.Container.Invoke(http.Serve)

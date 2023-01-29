@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package v1;
+package proto;
 
-option go_package = "./v1;v1";
+option go_package = "./proto;proto";
 
 service WebApi {
 	rpc Call(CallRequest) returns (CallResponse) {}
