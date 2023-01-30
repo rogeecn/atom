@@ -30,11 +30,9 @@ func (e *Service) Serve() error {
 	return e.Engine.Run(e.conf.Http.PortString())
 }
 
-func NewService(cfg *config.Config) *Service {
-	logger.Info("init http service with gin...")
-
-	gin.DefaultWriter = &logger.LevelWriter{Level: zap.InfoLevel}
-	gin.DefaultErrorWriter = &logger.LevelWriter{Level: zap.ErrorLevel}
+func NewService(cfg *config.Config, logger *logger.Logger) *Service {
+	gin.DefaultWriter = logger.LevelWriter(zap.InfoLevel)
+	gin.DefaultErrorWriter = logger.LevelWriter(zap.ErrorLevel)
 
 	if cfg.App.IsDebug() {
 		gin.SetMode(gin.DebugMode)

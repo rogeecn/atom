@@ -1,4 +1,4 @@
-package logger
+package log
 
 import (
 	"strings"
@@ -7,7 +7,8 @@ import (
 )
 
 type LevelWriter struct {
-	Level zapcore.Level
+	Logger *Logger
+	Level  zapcore.Level
 }
 
 func (w LevelWriter) Write(p []byte) (n int, err error) {
