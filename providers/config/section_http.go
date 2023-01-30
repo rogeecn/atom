@@ -1,6 +1,10 @@
 package config
 
-import "fmt"
+import (
+	"fmt"
+	"log"
+	"time"
+)
 
 type Http struct {
 	Static    string
@@ -13,6 +17,30 @@ type Http struct {
 		Mode      string
 		Whitelist []Whitelist
 	}
+	JWT JWT
+}
+
+type JWT struct {
+	SigningKey  string // jwt签名
+	ExpiresTime string // 过期时间
+	BufferTime  string // 缓冲时间
+	Issuer      string // 签发者
+}
+
+func (j JWT) ExpiresTimeDuration() time.Duration {
+	d, err := time.ParseDuration(j.ExpiresTime)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return d
+}
+
+func (j JWT) BufferTimeDuration() time.Duration {
+	d, err := time.ParseDuration(j.BufferTime)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return d
 }
 
 type Whitelist struct {

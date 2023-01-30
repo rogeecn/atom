@@ -10,13 +10,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-var c *Config
-
 type Config struct {
 	App      App
 	Http     Http
 	Log      Log
 	Database Database
+	Storage  Storage
 }
 
 func init() {

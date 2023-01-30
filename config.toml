@@ -1,12 +1,52 @@
 [App]
 Mode = "debug"
 
+[Storage]
+Driver = "local"
+
+[Storage.Local]
+Path="./storage"
+
+[Storage.AwsS3]
+Bucket = "bucket"
+Region = "region"
+Endpoint = "endpoint"
+DisableSSL = false
+SecretID = ""
+SecretKey = ""
+BaseURL = ""
+Path = ""
+S3ForcePathStyle  = false
+
+[Storage.AliYunOSS]
+Bucket = "bucket"
+Region = "region"
+Endpoint = "endpoint"
+AccessKeyID = ""
+AccessKeySecret = ""
+BaseURL = ""
+Path = ""
+
+
 [Http]
 Static = "./dist"
 Https = false
 HttpsCert = ""
 HttpKey = ""
 Port = 8088
+
+[Http.Captcha]
+KeyLong= 6
+Width= 240
+Height= 80
+OpenCaptcha= 0
+OpenCaptchaTimeout= 3600
+
+[Http.JWT]
+SigningKey="f3a0ed18-3eea-4bc9-b440-d56c3bb77bd8"
+ExpiresTime= "168h" # 7 days
+BufferTime= "24h"
+Issuer="AtomFramework"
 
 [Http.Cors]
 # 跨域配置
@@ -28,9 +68,22 @@ ExposeHeaders = "Content-Length, Access-Control-Allow-Origin, Access-Control-All
 AllowCredentials = true
 
 [Log]
+Driver = "zap"
 Level = "debug"
 
+[Log.Zap]
+Prefix = "[github.com/flipped-aurora/gin-vue-admin/server]"
+Format = "console"
+Director = "log"
+EncodeLevel= "LowercaseColorLevelEncoder"
+StacktraceKey= "stacktrace"
+MaxAge= 0
+ShowLine= true
+LogInConsole= true
+
+
 [Database]
+Driver = "mysql"
 
 [Database.MySQL]
 Host = "localhost"
@@ -38,3 +91,10 @@ Port = 3306
 Database = "demos"
 Username = "root"
 Password = "root"
+
+[Database.Redis]
+Host = "localhost"
+Port = 3306
+Database = 0
+Username = ""
+Password = ""

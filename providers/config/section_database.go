@@ -1,10 +1,14 @@
 package config
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // Database database config
 type Database struct {
+	Driver     string
 	MySQL      MySQL
+	Redis      Redis
 	PostgreSQL PostgreSQL
 }
 
@@ -17,7 +21,7 @@ type MySQL struct {
 	Password string
 }
 
-// DSN is the mysql connection dsn
+// DSN connection dsn
 func (m *MySQL) DSN() string {
 	dsnTpl := "%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local"
 
@@ -41,8 +45,22 @@ type PostgreSQL struct {
 	TimeZone string
 }
 
-// DSN is the mysql connection dsn
+// DSN connection dsn
 func (m *PostgreSQL) DSN() string {
 	dsnTpl := "host=%s user=%s password=%s dbname=%s port=%d sslmode=%s TimeZone=%s"
 	return fmt.Sprintf(dsnTpl, m.Host, m.User, m.Password, m.Database, m.Port, m.SslMode, m.TimeZone)
+}
+
+type Redis struct {
+	Host     string
+	Port     uint
+	Database uint
+	Username string
+	Password string
+}
+
+// DSN connection dsn
+func (m *Redis) DSN() string {
+	dsnTpl := "%s:%d"
+	return fmt.Sprintf(dsnTpl, m.Host, m.Port)
 }
