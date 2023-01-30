@@ -19,6 +19,10 @@ func init() {
 }
 
 func NewDatabase(config *config.Config) (*gorm.DB, error) {
+	if err := createDatabase(config.Database.MySQL.EmptyDsn(), "mysql", config.Database.MySQL.CreateDatabaseSql()); err != nil {
+		return nil, err
+	}
+
 	mysqlConfig := mysql.Config{
 		DSN:                       config.Database.MySQL.DSN(), // DSN data source name
 		DefaultStringSize:         191,                         // string 类型字段的默认长度
@@ -52,10 +56,6 @@ func NewDatabase(config *config.Config) (*gorm.DB, error) {
 	sqlDB, _ := db.DB()
 	sqlDB.SetMaxIdleConns(config.Database.MySQL.MaxIdleConns)
 	sqlDB.SetMaxOpenConns(config.Database.MySQL.MaxOpenConns)
-
-	if err := createDatabase(config.Database.MySQL.EmptyDsn(), "mysql", config.Database.MySQL.CreateDatabaseSql()); err != nil {
-		return nil, err
-	}
 
 	return db, err
 }

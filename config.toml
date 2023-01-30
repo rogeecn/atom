@@ -87,7 +87,7 @@ Driver = "mysql"
 [Database.MySQL]
 Host = "localhost"
 Port = 3306
-Database = "demos"
+Database = "demos11"
 Username = "root"
 Password = "root"
 Prefix=""
