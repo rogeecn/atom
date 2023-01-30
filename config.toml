@@ -5,7 +5,7 @@ Mode = "debug"
 Driver = "local"
 
 [Storage.Local]
-Path="./storage"
+Path = "./storage"
 
 [Storage.AwsS3]
 Bucket = "bucket"
@@ -16,7 +16,7 @@ SecretID = ""
 SecretKey = ""
 BaseURL = ""
 Path = ""
-S3ForcePathStyle  = false
+S3ForcePathStyle = false
 
 [Storage.AliYunOSS]
 Bucket = "bucket"
@@ -27,7 +27,6 @@ AccessKeySecret = ""
 BaseURL = ""
 Path = ""
 
-
 [Http]
 Static = "./dist"
 Https = false
@@ -36,23 +35,24 @@ HttpKey = ""
 Port = 8088
 
 [Http.Captcha]
-KeyLong= 6
-Width= 240
-Height= 80
-OpenCaptcha= 0
-OpenCaptchaTimeout= 3600
+KeyLong = 6
+Width = 240
+Height = 80
+OpenCaptcha = 0
+OpenCaptchaTimeout = 3600
 
 [Http.JWT]
-SigningKey="f3a0ed18-3eea-4bc9-b440-d56c3bb77bd8"
-ExpiresTime= "168h" # 7 days
-BufferTime= "24h"
-Issuer="AtomFramework"
+SigningKey = "f3a0ed18-3eea-4bc9-b440-d56c3bb77bd8"
+ExpiresTime = "168h" # 7 days
+BufferTime = "24h"
+Issuer = "AtomFramework"
 
 [Http.Cors]
 # 跨域配置
 # 需要配合 server/initialize/router.go#L32 使用
 # 放行模式: Allow-all, 放行全部; whitelist, 白名单模式, 来自白名单内域名的请求添加 cors 头; strict-whitelist 严格白名单模式, 白名单外的请求一律拒绝
-Mode="strict-whitelist" 
+Mode = "strict-whitelist"
+
 [[Http.Cors.Whitelist]]
 AllowOrigin = "example1.com"
 AllowHeaders = "Content-Type,AccessToken,X-CSRF-Token, Authorization, Token,X-Token,X-User-Id"
@@ -75,12 +75,11 @@ Level = "debug"
 Prefix = "[github.com/flipped-aurora/gin-vue-admin/server]"
 Format = "console"
 Director = "log"
-EncodeLevel= "LowercaseColorLevelEncoder"
-StacktraceKey= "stacktrace"
-MaxAge= 0
-ShowLine= true
-LogInConsole= true
-
+EncodeLevel = "LowercaseColorLevelEncoder"
+StacktraceKey = "stacktrace"
+MaxAge = 0
+ShowLine = true
+LogInConsole = true
 
 [Database]
 Driver = "mysql"
@@ -91,6 +90,11 @@ Port = 3306
 Database = "demos"
 Username = "root"
 Password = "root"
+Prefix=""
+Singular = false
+MaxIdleConns = 10
+MaxOpenConns = 200
+Engine = "InnoDB"
 
 [Database.Redis]
 Host = "localhost"
