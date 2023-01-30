@@ -5,6 +5,8 @@ package cmd
 
 import (
 	"atom/container"
+	"errors"
+	"log"
 
 	"github.com/spf13/cobra"
 	"go.uber.org/dig"
@@ -25,22 +27,40 @@ type GenQueryGenerator struct {
 // 	FilterWithNameAndRole(name, role string) ([]gen.T, error)
 // }
 
-// genCmd represents the gen command
-var genCmd = &cobra.Command{
-	Use:   "gen",
-	Short: "gorm query generator",
-	Long:  `gorm query generator. more info, see https://gorm.io/gen`,
+// modelCmd represents the gen command
+var modelCmd = &cobra.Command{
+	Use:   "model",
+	Short: "gorm model&query generator",
+	Long:  `gorm model&query generator. more info, see https://gorm.io/gen`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return container.Container.Invoke(func(gq GenQueryGenerator) error {
+			var tables []string
+			err := gq.DB.Raw("show tables").Scan(&tables).Error
+			if err != nil {
+				log.Fatal(err)
+			}
+			if len(tables) == 0 {
+				return errors.New("no tables in database, run migrate first")
+			}
+
 			g := gen.NewGenerator(gen.Config{
-				OutPath: "providers/query",
-				Mode:    gen.WithDefaultQuery | gen.WithQueryInterface, // generate mode
+				OutPath:          "database/query",
+				OutFile:          "query.gen.go",
+				ModelPkgPath:     "database/models",
+				FieldSignable:    true,
+				FieldWithTypeTag: true,
+				Mode:             gen.WithDefaultQuery | gen.WithQueryInterface,
 			})
 
 			g.UseDB(gq.DB) // reuse your gorm db
 
+			models := []interface{}{}
+			for _, table := range tables {
+				models = append(models, g.GenerateModel(table))
+			}
+
 			// Generate basic type-safe DAO API for struct `model.User` following conventions
-			g.ApplyBasic()
+			g.ApplyBasic(models...)
 
 			// Generate Type Safe API with Dynamic SQL defined on Querier interface for `model.User` and `model.Company`
 			// g.ApplyInterface(func(Querier) {}, model.User{}, model.Company{})
@@ -53,5 +73,5 @@ var genCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(genCmd)
+	rootCmd.AddCommand(modelCmd)
 }

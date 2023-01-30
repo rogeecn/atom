@@ -2,6 +2,7 @@ package query
 
 import (
 	"atom/container"
+	"atom/database/query"
 	"log"
 
 	"gorm.io/gorm"
@@ -13,6 +14,6 @@ func init() {
 	}
 }
 
-func NewQuery(db *gorm.DB) *Query {
-	return Use(db)
+func NewQuery(db *gorm.DB) *query.Query {
+	return query.Use(db)
 }

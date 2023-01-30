@@ -6,5 +6,4 @@ import (
 	_ "atom/providers/http"
 	_ "atom/providers/logger"
 	_ "atom/providers/micro"
-	_ "atom/providers/query"
 )
