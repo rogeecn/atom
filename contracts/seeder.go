@@ -1,8 +1,11 @@
 package contracts
 
-import "gorm.io/gorm"
+import (
+	"github.com/brianvoe/gofakeit/v6"
+	"gorm.io/gorm"
+)
 
 // Migration route interface
 type Seeder interface {
-	Run(*gorm.DB)
+	Run(*gofakeit.Faker, *gorm.DB)
 }

@@ -11,6 +11,7 @@ import (
 	"atom/contracts"
 	"log"
 
+	"github.com/brianvoe/gofakeit/v6"
 	"github.com/spf13/cobra"
 	"go.uber.org/dig"
 	"gorm.io/gorm"
@@ -22,14 +23,14 @@ var seedCmd = &cobra.Command{
 	Short: "seed databases",
 	Long:  `seed your database with data using seeders.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return container.Container.Invoke(func(seedersContainer SeedersContainer) error {
-			if len(seedersContainer.Seeders) == 0 {
+		return container.Container.Invoke(func(c SeedersContainer) error {
+			if len(c.Seeders) == 0 {
 				log.Print("no seeder exists")
 				return nil
 			}
 
-			for _, seeder := range seedersContainer.Seeders {
-				seeder.Run(seedersContainer.DB)
+			for _, seeder := range c.Seeders {
+				seeder.Run(c.Faker, c.DB)
 			}
 			return nil
 		})
@@ -47,5 +48,6 @@ type SeedersContainer struct {
 	dig.In
 
 	DB      *gorm.DB
+	Faker   *gofakeit.Faker
 	Seeders []contracts.Seeder `group:"seeders"`
 }

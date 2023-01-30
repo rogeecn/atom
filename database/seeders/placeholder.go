@@ -5,6 +5,7 @@ import (
 	"atom/contracts"
 	"log"
 
+	"github.com/brianvoe/gofakeit/v6"
 	"go.uber.org/dig"
 	"gorm.io/gorm"
 )
@@ -24,12 +25,16 @@ func NewPlaceholderSeeder() contracts.Seeder {
 
 type Placeholder struct {
 	gorm.Model
+
+	Username string
 }
 
-func (s *PlaceholderSeeder) Run(db *gorm.DB) {
+func (s *PlaceholderSeeder) Run(faker *gofakeit.Faker, db *gorm.DB) {
 
 }
 
-func (s *PlaceholderSeeder) Generate(idx int) Placeholder {
-	return Placeholder{}
+func (s *PlaceholderSeeder) Generate(faker *gofakeit.Faker, idx int) Placeholder {
+	return Placeholder{
+		Username: faker.Name(),
+	}
 }
