@@ -7,8 +7,7 @@ import (
 )
 
 type LevelWriter struct {
-	Logger *Logger
-	Level  zapcore.Level
+	Level zapcore.Level
 }
 
 func (w LevelWriter) Write(p []byte) (n int, err error) {

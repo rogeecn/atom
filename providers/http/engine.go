@@ -3,9 +3,8 @@ package http
 import (
 	"atom/container"
 	"atom/providers/config"
-	"atom/providers/logger"
+	"atom/providers/log"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -30,7 +29,7 @@ func (e *Service) Serve() error {
 	return e.Engine.Run(e.conf.Http.PortString())
 }
 
-func NewService(cfg *config.Config, logger *logger.Logger) *Service {
+func NewService(cfg *config.Config, logger *log.Logger) *Service {
 	gin.DefaultWriter = logger.LevelWriter(zap.InfoLevel)
 	gin.DefaultErrorWriter = logger.LevelWriter(zap.ErrorLevel)
 

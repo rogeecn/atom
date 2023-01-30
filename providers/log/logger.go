@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 func init() {
@@ -17,6 +18,10 @@ var DefaultLogger *Logger
 
 type Logger struct {
 	logger *zap.SugaredLogger
+}
+
+func (l *Logger) LevelWriter(level zapcore.Level) *LevelWriter {
+	return &LevelWriter{Level: level}
 }
 
 // Debug uses fmt.Sprint to construct and log a message.

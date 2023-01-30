@@ -5,6 +5,6 @@ import (
 	_ "atom/providers/database"
 	_ "atom/providers/faker"
 	_ "atom/providers/http"
-	_ "atom/providers/logger"
+	_ "atom/providers/log"
 	_ "atom/providers/micro"
 )

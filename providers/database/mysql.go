@@ -3,8 +3,8 @@ package mysql
 import (
 	"atom/container"
 	"atom/providers/config"
-	"atom/providers/logger"
 	"database/sql"
+	"log"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -12,7 +12,7 @@ import (
 
 func init() {
 	if err := container.Container.Provide(NewDatabase); err != nil {
-		logger.Fatal(err)
+		log.Fatal(err)
 	}
 }
 
