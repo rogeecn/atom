@@ -16,34 +16,39 @@ import (
 )
 
 var (
-	Q         = new(Query)
-	Migration *migration
+	Q                  = new(Query)
+	Migration          *migration
+	SysOperationRecord *sysOperationRecord
 )
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
 	Migration = &Q.Migration
+	SysOperationRecord = &Q.SysOperationRecord
 }
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
-		db:        db,
-		Migration: newMigration(db, opts...),
+		db:                 db,
+		Migration:          newMigration(db, opts...),
+		SysOperationRecord: newSysOperationRecord(db, opts...),
 	}
 }
 
 type Query struct {
 	db *gorm.DB
 
-	Migration migration
+	Migration          migration
+	SysOperationRecord sysOperationRecord
 }
 
 func (q *Query) Available() bool { return q.db != nil }
 
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
-		db:        db,
-		Migration: q.Migration.clone(db),
+		db:                 db,
+		Migration:          q.Migration.clone(db),
+		SysOperationRecord: q.SysOperationRecord.clone(db),
 	}
 }
 
@@ -57,18 +62,21 @@ func (q *Query) WriteDB() *Query {
 
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
-		db:        db,
-		Migration: q.Migration.replaceDB(db),
+		db:                 db,
+		Migration:          q.Migration.replaceDB(db),
+		SysOperationRecord: q.SysOperationRecord.replaceDB(db),
 	}
 }
 
 type queryCtx struct {
-	Migration IMigrationDo
+	Migration          IMigrationDo
+	SysOperationRecord ISysOperationRecordDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
-		Migration: q.Migration.WithContext(ctx),
+		Migration:          q.Migration.WithContext(ctx),
+		SysOperationRecord: q.SysOperationRecord.WithContext(ctx),
 	}
 }
 
