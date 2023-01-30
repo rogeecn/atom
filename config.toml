@@ -32,7 +32,7 @@ Static = "./dist"
 Https = false
 HttpsCert = ""
 HttpKey = ""
-Port = 8088
+Port = 9800
 
 [Http.Captcha]
 KeyLong = 6
