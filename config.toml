@@ -8,6 +8,25 @@ HttpsCert = ""
 HttpKey = ""
 Port = 8088
 
+[Http.Cors]
+# 跨域配置
+# 需要配合 server/initialize/router.go#L32 使用
+# 放行模式: Allow-all, 放行全部; whitelist, 白名单模式, 来自白名单内域名的请求添加 cors 头; strict-whitelist 严格白名单模式, 白名单外的请求一律拒绝
+Mode="strict-whitelist" 
+[[Http.Cors.Whitelist]]
+AllowOrigin = "example1.com"
+AllowHeaders = "Content-Type,AccessToken,X-CSRF-Token, Authorization, Token,X-Token,X-User-Id"
+AllowMethods = "POST, GET"
+ExposeHeaders = "Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type"
+AllowCredentials = true
+
+[[Http.Cors.Whitelist]]
+AllowOrigin = "example2.com"
+AllowHeaders = "content-type"
+AllowMethods = "GET, POST"
+ExposeHeaders = "Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type"
+AllowCredentials = true
+
 [Log]
 Level = "debug"
 

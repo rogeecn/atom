@@ -9,6 +9,18 @@ type Http struct {
 	Https     bool
 	HttpsCert string
 	HttpKey   string
+	Cors      struct {
+		Mode      string
+		Whitelist []Whitelist
+	}
+}
+
+type Whitelist struct {
+	AllowOrigin      string
+	AllowHeaders     string
+	AllowMethods     string
+	ExposeHeaders    string
+	AllowCredentials bool
 }
 
 func (h Http) Address() string {
