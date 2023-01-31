@@ -17,6 +17,7 @@ import (
 
 var (
 	Q                   = new(Query)
+	CasbinRule          *casbinRule
 	Migration           *migration
 	SysAPI              *sysAPI
 	SysDictionary       *sysDictionary
@@ -29,6 +30,7 @@ var (
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
+	CasbinRule = &Q.CasbinRule
 	Migration = &Q.Migration
 	SysAPI = &Q.SysAPI
 	SysDictionary = &Q.SysDictionary
@@ -42,6 +44,7 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
 		db:                  db,
+		CasbinRule:          newCasbinRule(db, opts...),
 		Migration:           newMigration(db, opts...),
 		SysAPI:              newSysAPI(db, opts...),
 		SysDictionary:       newSysDictionary(db, opts...),
@@ -56,6 +59,7 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 type Query struct {
 	db *gorm.DB
 
+	CasbinRule          casbinRule
 	Migration           migration
 	SysAPI              sysAPI
 	SysDictionary       sysDictionary
@@ -71,6 +75,7 @@ func (q *Query) Available() bool { return q.db != nil }
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
 		db:                  db,
+		CasbinRule:          q.CasbinRule.clone(db),
 		Migration:           q.Migration.clone(db),
 		SysAPI:              q.SysAPI.clone(db),
 		SysDictionary:       q.SysDictionary.clone(db),
@@ -93,6 +98,7 @@ func (q *Query) WriteDB() *Query {
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
 		db:                  db,
+		CasbinRule:          q.CasbinRule.replaceDB(db),
 		Migration:           q.Migration.replaceDB(db),
 		SysAPI:              q.SysAPI.replaceDB(db),
 		SysDictionary:       q.SysDictionary.replaceDB(db),
@@ -105,6 +111,7 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 }
 
 type queryCtx struct {
+	CasbinRule          ICasbinRuleDo
 	Migration           IMigrationDo
 	SysAPI              ISysAPIDo
 	SysDictionary       ISysDictionaryDo
@@ -117,6 +124,7 @@ type queryCtx struct {
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
+		CasbinRule:          q.CasbinRule.WithContext(ctx),
 		Migration:           q.Migration.WithContext(ctx),
 		SysAPI:              q.SysAPI.WithContext(ctx),
 		SysDictionary:       q.SysDictionary.WithContext(ctx),
