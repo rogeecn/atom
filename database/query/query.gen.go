@@ -16,39 +16,69 @@ import (
 )
 
 var (
-	Q                  = new(Query)
-	Migration          *migration
-	SysOperationRecord *sysOperationRecord
+	Q                   = new(Query)
+	Migration           *migration
+	SysAPI              *sysAPI
+	SysDictionary       *sysDictionary
+	SysDictionaryDetail *sysDictionaryDetail
+	SysOperationRecord  *sysOperationRecord
+	SysRole             *sysRole
+	User                *user
+	UserRole            *userRole
 )
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
 	Migration = &Q.Migration
+	SysAPI = &Q.SysAPI
+	SysDictionary = &Q.SysDictionary
+	SysDictionaryDetail = &Q.SysDictionaryDetail
 	SysOperationRecord = &Q.SysOperationRecord
+	SysRole = &Q.SysRole
+	User = &Q.User
+	UserRole = &Q.UserRole
 }
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
-		db:                 db,
-		Migration:          newMigration(db, opts...),
-		SysOperationRecord: newSysOperationRecord(db, opts...),
+		db:                  db,
+		Migration:           newMigration(db, opts...),
+		SysAPI:              newSysAPI(db, opts...),
+		SysDictionary:       newSysDictionary(db, opts...),
+		SysDictionaryDetail: newSysDictionaryDetail(db, opts...),
+		SysOperationRecord:  newSysOperationRecord(db, opts...),
+		SysRole:             newSysRole(db, opts...),
+		User:                newUser(db, opts...),
+		UserRole:            newUserRole(db, opts...),
 	}
 }
 
 type Query struct {
 	db *gorm.DB
 
-	Migration          migration
-	SysOperationRecord sysOperationRecord
+	Migration           migration
+	SysAPI              sysAPI
+	SysDictionary       sysDictionary
+	SysDictionaryDetail sysDictionaryDetail
+	SysOperationRecord  sysOperationRecord
+	SysRole             sysRole
+	User                user
+	UserRole            userRole
 }
 
 func (q *Query) Available() bool { return q.db != nil }
 
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
-		db:                 db,
-		Migration:          q.Migration.clone(db),
-		SysOperationRecord: q.SysOperationRecord.clone(db),
+		db:                  db,
+		Migration:           q.Migration.clone(db),
+		SysAPI:              q.SysAPI.clone(db),
+		SysDictionary:       q.SysDictionary.clone(db),
+		SysDictionaryDetail: q.SysDictionaryDetail.clone(db),
+		SysOperationRecord:  q.SysOperationRecord.clone(db),
+		SysRole:             q.SysRole.clone(db),
+		User:                q.User.clone(db),
+		UserRole:            q.UserRole.clone(db),
 	}
 }
 
@@ -62,21 +92,39 @@ func (q *Query) WriteDB() *Query {
 
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
-		db:                 db,
-		Migration:          q.Migration.replaceDB(db),
-		SysOperationRecord: q.SysOperationRecord.replaceDB(db),
+		db:                  db,
+		Migration:           q.Migration.replaceDB(db),
+		SysAPI:              q.SysAPI.replaceDB(db),
+		SysDictionary:       q.SysDictionary.replaceDB(db),
+		SysDictionaryDetail: q.SysDictionaryDetail.replaceDB(db),
+		SysOperationRecord:  q.SysOperationRecord.replaceDB(db),
+		SysRole:             q.SysRole.replaceDB(db),
+		User:                q.User.replaceDB(db),
+		UserRole:            q.UserRole.replaceDB(db),
 	}
 }
 
 type queryCtx struct {
-	Migration          IMigrationDo
-	SysOperationRecord ISysOperationRecordDo
+	Migration           IMigrationDo
+	SysAPI              ISysAPIDo
+	SysDictionary       ISysDictionaryDo
+	SysDictionaryDetail ISysDictionaryDetailDo
+	SysOperationRecord  ISysOperationRecordDo
+	SysRole             ISysRoleDo
+	User                IUserDo
+	UserRole            IUserRoleDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
-		Migration:          q.Migration.WithContext(ctx),
-		SysOperationRecord: q.SysOperationRecord.WithContext(ctx),
+		Migration:           q.Migration.WithContext(ctx),
+		SysAPI:              q.SysAPI.WithContext(ctx),
+		SysDictionary:       q.SysDictionary.WithContext(ctx),
+		SysDictionaryDetail: q.SysDictionaryDetail.WithContext(ctx),
+		SysOperationRecord:  q.SysOperationRecord.WithContext(ctx),
+		SysRole:             q.SysRole.WithContext(ctx),
+		User:                q.User.WithContext(ctx),
+		UserRole:            q.UserRole.WithContext(ctx),
 	}
 }
 

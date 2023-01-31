@@ -25,3 +25,15 @@ lint:
 .PHONY: proto
 proto:
 	@buf generate
+
+.PHONY: mup
+mup:
+	@go run . migrate up
+
+.PHONY: mdown
+mdown:
+	@go run . migrate down
+
+.PHONY: model
+model:
+	@go run . model
