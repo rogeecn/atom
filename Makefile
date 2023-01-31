@@ -17,3 +17,11 @@ dist:
 .PHONY: test
 test:
 	@go test -v ./... -cover
+
+.PHONY: lint
+lint:
+	@golangci-lint run
+
+.PHONY: proto
+proto:
+	@buf generate

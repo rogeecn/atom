@@ -19,13 +19,15 @@ func Unzip(zipFile string, destDir string) ([]string, error) {
 	defer zipReader.Close()
 
 	for _, f := range zipReader.File {
-		if strings.Index(f.Name, "..") > -1 {
+		if strings.Contains(f.Name, "..") {
 			return []string{}, fmt.Errorf("%s 文件名不合法", f.Name)
 		}
 		fpath := filepath.Join(destDir, f.Name)
 		paths = append(paths, fpath)
 		if f.FileInfo().IsDir() {
-			os.MkdirAll(fpath, os.ModePerm)
+			if err := os.MkdirAll(fpath, os.ModePerm); err != nil {
+				return nil, err
+			}
 		} else {
 			if err = os.MkdirAll(filepath.Dir(fpath), os.ModePerm); err != nil {
 				return []string{}, err

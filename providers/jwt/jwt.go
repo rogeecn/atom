@@ -3,10 +3,11 @@ package jwt
 import (
 	"atom/container"
 	"atom/providers/config"
+	"atom/providers/log"
 	"errors"
-	"log"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	jwt "github.com/golang-jwt/jwt/v4"
 	uuid "github.com/satori/go.uuid"
 	"golang.org/x/sync/singleflight"
@@ -22,12 +23,12 @@ func init() {
 type CustomClaims struct {
 	BaseClaims
 	BufferTime int64
-	jwt.StandardClaims
+	jwt.RegisteredClaims
 }
 
 type BaseClaims struct {
 	UUID        uuid.UUID
-	ID          uint
+	UserID      uint
 	Username    string
 	NickName    string
 	AuthorityId uint
@@ -59,10 +60,10 @@ func (j *JWT) CreateClaims(baseClaims BaseClaims) CustomClaims {
 	claims := CustomClaims{
 		BaseClaims: baseClaims,
 		BufferTime: int64(bf / time.Second), // 缓冲时间1天 缓冲时间内会获得新的token刷新令牌 此时一个用户会存在两个有效令牌 但是前端只留一个 另一个会丢失
-		StandardClaims: jwt.StandardClaims{
-			NotBefore: time.Now().Unix() - 1000,  // 签名生效时间
-			ExpiresAt: time.Now().Add(ep).Unix(), // 过期时间 7天  配置文件
-			Issuer:    j.config.Http.JWT.Issuer,  // 签名的发行者
+		RegisteredClaims: jwt.RegisteredClaims{
+			NotBefore: jwt.NewNumericDate(time.Now().Add(-time.Second * 10)), // 签名生效时间
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(ep)),                // 过期时间 7天  配置文件
+			Issuer:    j.config.Http.JWT.Issuer,                              // 签名的发行者
 		},
 	}
 	return claims
@@ -112,7 +113,67 @@ func (j *JWT) ParseToken(tokenString string) (*CustomClaims, error) {
 	}
 }
 
-// 解析 token
-func (j *JWT) ParseCliam(claim string) (*CustomClaims, error) {
+func (j *JWT) GetClaims(c *gin.Context) (*CustomClaims, error) {
+	token := c.Request.Header.Get("x-token")
+	claims, err := j.ParseToken(token)
+	if err != nil {
+		log.Error("从Gin的Context中获取从jwt解析信息失败, 请检查请求头是否存在x-token且claims是否为规定结构")
+	}
+	return claims, err
+}
 
+// GetUserID 从Gin的Context中获取从jwt解析出来的用户ID
+func (j *JWT) GetUserID(c *gin.Context) uint {
+	if claims, exists := c.Get("claims"); !exists {
+		if cl, err := j.GetClaims(c); err != nil {
+			return 0
+		} else {
+			return cl.UserID
+		}
+	} else {
+		waitUse := claims.(*CustomClaims)
+		return waitUse.UserID
+	}
+}
+
+// GetUserUuid 从Gin的Context中获取从jwt解析出来的用户UUID
+func (j *JWT) GetUserUuid(c *gin.Context) uuid.UUID {
+	if claims, exists := c.Get("claims"); !exists {
+		if cl, err := j.GetClaims(c); err != nil {
+			return uuid.UUID{}
+		} else {
+			return cl.UUID
+		}
+	} else {
+		waitUse := claims.(*CustomClaims)
+		return waitUse.UUID
+	}
+}
+
+// GetUserAuthorityId 从Gin的Context中获取从jwt解析出来的用户角色id
+func (j *JWT) GetUserAuthorityId(c *gin.Context) uint {
+	if claims, exists := c.Get("claims"); !exists {
+		if cl, err := j.GetClaims(c); err != nil {
+			return 0
+		} else {
+			return cl.AuthorityId
+		}
+	} else {
+		waitUse := claims.(*CustomClaims)
+		return waitUse.AuthorityId
+	}
+}
+
+// GetUserInfo 从Gin的Context中获取从jwt解析出来的用户角色id
+func (j *JWT) GetUserInfo(c *gin.Context) *CustomClaims {
+	if claims, exists := c.Get("claims"); !exists {
+		if cl, err := j.GetClaims(c); err != nil {
+			return nil
+		} else {
+			return cl
+		}
+	} else {
+		waitUse := claims.(*CustomClaims)
+		return waitUse
+	}
 }

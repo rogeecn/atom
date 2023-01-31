@@ -7,6 +7,5 @@ import (
 	_ "atom/providers/http"
 	_ "atom/providers/jwt"
 	_ "atom/providers/log"
-	_ "atom/providers/micro"
 	_ "atom/providers/single_flight"
 )

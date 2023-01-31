@@ -2,6 +2,7 @@ package container
 
 import (
 	"context"
+	"log"
 
 	"go.uber.org/dig"
 )
@@ -9,5 +10,7 @@ import (
 var Container *dig.Container = dig.New()
 
 func init() {
-	Container.Provide(context.Background)
+	if err := Container.Provide(context.Background); err != nil {
+		log.Fatal(err)
+	}
 }

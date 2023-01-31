@@ -67,7 +67,7 @@ type PostgreSQL struct {
 }
 
 func (m *PostgreSQL) EmptyDsn() string {
-	dsnTpl := "host=%s user=%s password=%s port=%s dbname=postgres sslmode=disable TimeZone=Asia/Shanghai"
+	dsnTpl := "host=%s user=%s password=%s port=%d dbname=postgres sslmode=disable TimeZone=Asia/Shanghai"
 
 	return fmt.Sprintf(dsnTpl, m.Host, m.User, m.Password, m.Port)
 }

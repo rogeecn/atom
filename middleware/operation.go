@@ -1,7 +1,9 @@
 package middleware
 
 import (
-	"atom/utils"
+	"atom/database/models"
+	"atom/providers/jwt"
+	"atom/providers/log"
 	"bytes"
 	"encoding/json"
 	"io"
@@ -12,14 +14,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gva-plugins/email/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
-
-var operationRecordService = service.ServiceGroupApp.SystemServiceGroup.OperationRecordService
 
 var respPool sync.Pool
 
@@ -29,15 +26,15 @@ func init() {
 	}
 }
 
-func OperationRecord() gin.HandlerFunc {
+func OperationRecord(jwt *jwt.JWT) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var body []byte
-		var userId int
+		var userId int64
 		if c.Request.Method != http.MethodGet {
 			var err error
 			body, err = io.ReadAll(c.Request.Body)
 			if err != nil {
-				global.GVA_LOG.Error("read body from request error:", zap.Error(err))
+				log.Error("read body from request error:", zap.Error(err))
 			} else {
 				c.Request.Body = io.NopCloser(bytes.NewBuffer(body))
 			}
@@ -54,18 +51,18 @@ func OperationRecord() gin.HandlerFunc {
 			}
 			body, _ = json.Marshal(&m)
 		}
-		claims, _ := utils.GetClaims(c)
-		if claims.ID != 0 {
-			userId = int(claims.ID)
+		claims, _ := jwt.GetClaims(c)
+		if claims.UserID != 0 {
+			userId = int64(claims.UserID)
 		} else {
 			id, err := strconv.Atoi(c.Request.Header.Get("x-user-id"))
 			if err != nil {
-				userId = 0
+				log.Error(err)
 			}
-			userId = id
+			userId = int64(id)
 		}
-		record := system.SysOperationRecord{
-			Ip:     c.ClientIP(),
+		record := models.SysOperationRecord{
+			IP:     c.ClientIP(),
 			Method: c.Request.Method,
 			Path:   c.Request.URL.Path,
 			Agent:  c.Request.UserAgent(),
@@ -80,7 +77,7 @@ func OperationRecord() gin.HandlerFunc {
 				newBody := respPool.Get().([]byte)
 				copy(newBody, record.Body)
 				record.Body = string(newBody)
-				defer respPool.Put(newBody[:0])
+				defer respPool.Put(&newBody)
 			}
 		}
 
@@ -95,8 +92,8 @@ func OperationRecord() gin.HandlerFunc {
 
 		latency := time.Since(now)
 		record.ErrorMessage = c.Errors.ByType(gin.ErrorTypePrivate).String()
-		record.Status = c.Writer.Status()
-		record.Latency = latency
+		record.Status = int64(c.Writer.Status())
+		record.Latency = int64(latency)
 		record.Resp = writer.body.String()
 
 		if strings.Contains(c.Writer.Header().Get("Pragma"), "public") ||
@@ -113,13 +110,13 @@ func OperationRecord() gin.HandlerFunc {
 				newBody := respPool.Get().([]byte)
 				copy(newBody, record.Resp)
 				record.Body = string(newBody)
-				defer respPool.Put(newBody[:0])
+				defer respPool.Put(&newBody)
 			}
 		}
 
-		if err := operationRecordService.CreateSysOperationRecord(record); err != nil {
-			global.GVA_LOG.Error("create operation record error:", zap.Error(err))
-		}
+		// if err := operationRecordService.CreateSysOperationRecord(record); err != nil {
+		// 	log.Error("create operation record error:", zap.Error(err))
+		// }
 	}
 }
 
