@@ -9,14 +9,14 @@ import (
 )
 
 type Route struct {
-	controller controller.Controller
-	svc        *http.Service
+	captcha controller.CaptchaController
+	svc     *http.Service
 }
 
-func NewRoute(c controller.Controller, svc *http.Service) contracts.Route {
-	return &Route{controller: c, svc: svc}
+func NewRoute(captcha controller.CaptchaController, svc *http.Service) contracts.Route {
+	return &Route{captcha: captcha, svc: svc}
 }
 
 func (r *Route) Register() {
-	r.svc.Engine.GET("/name", gen.DataFunc(r.controller.GetName))
+	r.svc.Engine.GET("/captcha", gen.DataFunc(r.captcha.GetName))
 }

@@ -20,7 +20,7 @@ func init() {
 		log.Fatal(err)
 	}
 
-	if err := container.Container.Provide(controller.NewController); err != nil {
+	if err := container.Container.Provide(controller.NewCaptchaController); err != nil {
 		log.Fatal(err)
 	}
 

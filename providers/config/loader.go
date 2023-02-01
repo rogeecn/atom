@@ -12,6 +12,7 @@ import (
 
 type Config struct {
 	App      App
+	Captcha  Captcha
 	Http     Http
 	Log      Log
 	Database Database
