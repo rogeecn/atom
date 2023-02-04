@@ -18,7 +18,7 @@ type SysRole struct {
 	CreatedAt     time.Time      `gorm:"column:created_at;type:datetime(3)" json:"created_at"`
 	UpdatedAt     time.Time      `gorm:"column:updated_at;type:datetime(3)" json:"updated_at"`
 	DeletedAt     gorm.DeletedAt `gorm:"column:deleted_at;type:datetime(3)" json:"deleted_at"`
-	Alias_        string         `gorm:"column:alias;type:varchar(90);primaryKey" json:"alias"`                           // 角色Alias
+	UUID          string         `gorm:"column:uuid;type:varchar(90);primaryKey" json:"uuid"`                             // 角色Alias
 	Name          string         `gorm:"column:name;type:varchar(191)" json:"name"`                                       // 角色名
 	ParentID      uint64         `gorm:"column:parent_id;type:bigint(20) unsigned" json:"parent_id"`                      // 父角色ID
 	DefaultRouter string         `gorm:"column:default_router;type:varchar(191);default:dashboard" json:"default_router"` // 默认菜单

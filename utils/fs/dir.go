@@ -1,11 +1,8 @@
 package fs
 
 import (
-	"atom/providers/log"
 	"errors"
 	"os"
-
-	"go.uber.org/zap"
 )
 
 func PathExists(path string) (bool, error) {
@@ -29,9 +26,7 @@ func CreateDir(dirs ...string) (err error) {
 			return err
 		}
 		if !exist {
-			log.Debug("create directory" + v)
 			if err := os.MkdirAll(v, os.ModePerm); err != nil {
-				log.Error("create directory"+v, zap.Any(" error:", err))
 				return err
 			}
 		}

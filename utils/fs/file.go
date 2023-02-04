@@ -63,3 +63,12 @@ func FileExist(path string) bool {
 	}
 	return !os.IsNotExist(err)
 }
+
+func FilePathInfo(file string) (path, name, ext string) {
+	filename := filepath.Base(file)
+
+	path = filepath.Dir(file)
+	ext = filepath.Ext(filename)
+	name = strings.TrimSuffix(filename, ext)
+	return
+}

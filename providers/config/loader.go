@@ -3,6 +3,7 @@ package config
 import (
 	"atom/container"
 	"atom/utils"
+	"atom/utils/fs"
 	"log"
 
 	"github.com/pkg/errors"
@@ -34,10 +35,12 @@ func Load() (*Config, error) {
 			return nil, err
 		}
 	}
+	path, name, _ := fs.FilePathInfo(confFile)
 
-	viper.SetConfigName(confFile) // name of config file (without extension)
+	viper.SetConfigName(name)     // name of config file (without extension)
 	viper.SetConfigType("toml")   // REQUIRED if the config file does not have the extension in the name
 	viper.AddConfigPath("$HOME/") // call multiple times to add many search paths
+	viper.AddConfigPath(path)     // optionally look for config in the working directory
 	viper.AddConfigPath(".")      // optionally look for config in the working directory
 	// Find and read the config file
 	if err := viper.ReadInConfig(); err != nil { // Handle errors reading the config file

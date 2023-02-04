@@ -9,5 +9,6 @@ import (
 	_ "atom/providers/http"
 	_ "atom/providers/jwt"
 	_ "atom/providers/log"
+	_ "atom/providers/query"
 	_ "atom/providers/single_flight"
 )

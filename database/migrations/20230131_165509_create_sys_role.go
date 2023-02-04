@@ -40,7 +40,7 @@ func (m *Migration20230131_165509CreateSysRole) table() interface{} {
 	type SysRole struct {
 		gorm.Model
 
-		Alias         string `gorm:"not null;unique;primary_key;comment:角色Alias;size:90"` // 角色ID
+		UUID          string `gorm:"not null;unique;primary_key;comment:角色Alias;size:90"` // 角色UUID
 		Name          string `gorm:"comment:角色名"`                                         // 角色名
 		ParentId      *uint  `gorm:"comment:父角色ID"`                                       // 父角色ID
 		DefaultRouter string `gorm:"comment:默认菜单;default:dashboard"`                      // 默认菜单(默认dashboard)

@@ -31,7 +31,7 @@ func newSysRole(db *gorm.DB, opts ...gen.DOOption) sysRole {
 	_sysRole.CreatedAt = field.NewTime(tableName, "created_at")
 	_sysRole.UpdatedAt = field.NewTime(tableName, "updated_at")
 	_sysRole.DeletedAt = field.NewField(tableName, "deleted_at")
-	_sysRole.Alias_ = field.NewString(tableName, "alias")
+	_sysRole.UUID = field.NewString(tableName, "uuid")
 	_sysRole.Name = field.NewString(tableName, "name")
 	_sysRole.ParentID = field.NewUint64(tableName, "parent_id")
 	_sysRole.DefaultRouter = field.NewString(tableName, "default_router")
@@ -49,7 +49,7 @@ type sysRole struct {
 	CreatedAt     field.Time
 	UpdatedAt     field.Time
 	DeletedAt     field.Field
-	Alias_        field.String // 角色Alias
+	UUID          field.String // 角色Alias
 	Name          field.String // 角色名
 	ParentID      field.Uint64 // 父角色ID
 	DefaultRouter field.String // 默认菜单
@@ -73,7 +73,7 @@ func (s *sysRole) updateTableName(table string) *sysRole {
 	s.CreatedAt = field.NewTime(table, "created_at")
 	s.UpdatedAt = field.NewTime(table, "updated_at")
 	s.DeletedAt = field.NewField(table, "deleted_at")
-	s.Alias_ = field.NewString(table, "alias")
+	s.UUID = field.NewString(table, "uuid")
 	s.Name = field.NewString(table, "name")
 	s.ParentID = field.NewUint64(table, "parent_id")
 	s.DefaultRouter = field.NewString(table, "default_router")
@@ -104,7 +104,7 @@ func (s *sysRole) fillFieldMap() {
 	s.fieldMap["created_at"] = s.CreatedAt
 	s.fieldMap["updated_at"] = s.UpdatedAt
 	s.fieldMap["deleted_at"] = s.DeletedAt
-	s.fieldMap["alias"] = s.Alias_
+	s.fieldMap["uuid"] = s.UUID
 	s.fieldMap["name"] = s.Name
 	s.fieldMap["parent_id"] = s.ParentID
 	s.fieldMap["default_router"] = s.DefaultRouter
