@@ -18,5 +18,5 @@ func NewRoute(captcha controller.CaptchaController, svc *http.Service) contracts
 }
 
 func (r *Route) Register() {
-	r.svc.Engine.GET("/captcha", gen.DataFunc(r.captcha.GetName))
+	r.svc.Engine.GET("/captcha", gen.DataFunc(r.captcha.Show))
 }

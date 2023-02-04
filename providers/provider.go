@@ -1,6 +1,8 @@
 package providers
 
 import (
+	_ "atom/providers/captcha"
+	_ "atom/providers/captcha/driver"
 	_ "atom/providers/config"
 	_ "atom/providers/database"
 	_ "atom/providers/faker"
