@@ -5,6 +5,7 @@ import (
 	"atom/modules/auth/controller"
 	"atom/modules/auth/dao"
 	"atom/modules/auth/routes"
+	"atom/modules/auth/service"
 	"log"
 
 	"go.uber.org/dig"
@@ -22,6 +23,9 @@ func init() {
 	}
 
 	//service
+	if err := container.Container.Provide(service.NewRoleService); err != nil {
+		log.Fatal(err)
+	}
 
 	// dao
 	if err := container.Container.Provide(dao.NewRoleDao); err != nil {

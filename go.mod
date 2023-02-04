@@ -1,6 +1,6 @@
 module atom
 
-go 1.18
+go 1.19
 
 require (
 	github.com/brianvoe/gofakeit/v6 v6.20.1
