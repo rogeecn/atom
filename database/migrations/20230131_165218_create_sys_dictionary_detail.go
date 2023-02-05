@@ -40,11 +40,11 @@ func (m *Migration20230131_165218CreateSysDictionaryDetail) table() interface{} 
 	type SysDictionaryDetail struct {
 		gorm.Model
 
-		Label           string `gorm:"column:label;comment:展示值"`              // 展示值
-		Value           int    `gorm:"column:value;comment:字典值"`              // 字典值
-		Status          *bool  `gorm:"column:status;comment:启用状态"`            // 启用状态
-		Sort            int    `gorm:"column:sort;comment:排序标记"`              // 排序标记
-		SysDictionaryID int    `gorm:"column:sys_dictionary_id;comment:关联标记"` // 关联标记
+		SysDictionaryID int    `gorm:"comment:关联标记"`
+		Label           string `gorm:"comment:展示值"`
+		Value           string `gorm:"comment:字典值"`
+		Status          bool   `gorm:"comment:启用状态"`
+		Weight          int    `gorm:"comment:排序权重"`
 	}
 
 	return SysDictionaryDetail{}

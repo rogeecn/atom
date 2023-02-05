@@ -32,9 +32,9 @@ func newSysDictionary(db *gorm.DB, opts ...gen.DOOption) sysDictionary {
 	_sysDictionary.UpdatedAt = field.NewTime(tableName, "updated_at")
 	_sysDictionary.DeletedAt = field.NewField(tableName, "deleted_at")
 	_sysDictionary.Name = field.NewString(tableName, "name")
-	_sysDictionary.Type = field.NewString(tableName, "type")
+	_sysDictionary.Alias_ = field.NewString(tableName, "alias")
 	_sysDictionary.Status = field.NewBool(tableName, "status")
-	_sysDictionary.Desc = field.NewString(tableName, "desc")
+	_sysDictionary.Description = field.NewString(tableName, "description")
 
 	_sysDictionary.fillFieldMap()
 
@@ -44,15 +44,15 @@ func newSysDictionary(db *gorm.DB, opts ...gen.DOOption) sysDictionary {
 type sysDictionary struct {
 	sysDictionaryDo sysDictionaryDo
 
-	ALL       field.Asterisk
-	ID        field.Uint64
-	CreatedAt field.Time
-	UpdatedAt field.Time
-	DeletedAt field.Field
-	Name      field.String // 字典名（中）
-	Type      field.String // 字典名（英）
-	Status    field.Bool   // 状态
-	Desc      field.String // 描述
+	ALL         field.Asterisk
+	ID          field.Uint64
+	CreatedAt   field.Time
+	UpdatedAt   field.Time
+	DeletedAt   field.Field
+	Name        field.String // 字典名（中）
+	Alias_      field.String // 字典名（英）
+	Status      field.Bool   // 状态
+	Description field.String // 描述
 
 	fieldMap map[string]field.Expr
 }
@@ -74,9 +74,9 @@ func (s *sysDictionary) updateTableName(table string) *sysDictionary {
 	s.UpdatedAt = field.NewTime(table, "updated_at")
 	s.DeletedAt = field.NewField(table, "deleted_at")
 	s.Name = field.NewString(table, "name")
-	s.Type = field.NewString(table, "type")
+	s.Alias_ = field.NewString(table, "alias")
 	s.Status = field.NewBool(table, "status")
-	s.Desc = field.NewString(table, "desc")
+	s.Description = field.NewString(table, "description")
 
 	s.fillFieldMap()
 
@@ -107,9 +107,9 @@ func (s *sysDictionary) fillFieldMap() {
 	s.fieldMap["updated_at"] = s.UpdatedAt
 	s.fieldMap["deleted_at"] = s.DeletedAt
 	s.fieldMap["name"] = s.Name
-	s.fieldMap["type"] = s.Type
+	s.fieldMap["alias"] = s.Alias_
 	s.fieldMap["status"] = s.Status
-	s.fieldMap["desc"] = s.Desc
+	s.fieldMap["description"] = s.Description
 }
 
 func (s sysDictionary) clone(db *gorm.DB) sysDictionary {

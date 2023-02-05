@@ -18,6 +18,10 @@ func init() {
 		log.Fatal(err)
 	}
 
+	if err := container.Container.Provide(controller.NewUserController); err != nil {
+		log.Fatal(err)
+	}
+
 	if err := container.Container.Provide(controller.NewPermissionController); err != nil {
 		log.Fatal(err)
 	}
@@ -27,11 +31,24 @@ func init() {
 		log.Fatal(err)
 	}
 
+	if err := container.Container.Provide(service.NewUserService); err != nil {
+		log.Fatal(err)
+	}
+
 	// dao
 	if err := container.Container.Provide(dao.NewRoleDao); err != nil {
 		log.Fatal(err)
 	}
 
+	if err := container.Container.Provide(dao.NewUserDao); err != nil {
+		log.Fatal(err)
+	}
+
+	if err := container.Container.Provide(dao.NewUserRoleDao); err != nil {
+		log.Fatal(err)
+	}
+
+	// routes
 	if err := container.Container.Provide(routes.NewRoute, dig.Group("route")); err != nil {
 		log.Fatal(err)
 	}

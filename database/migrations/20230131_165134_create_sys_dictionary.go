@@ -40,10 +40,10 @@ func (m *Migration20230131_165134CreateSysDictionary) table() interface{} {
 	type SysDictionary struct {
 		gorm.Model
 
-		Name   string `gorm:"column:name;comment:字典名（中）"` // 字典名（中）
-		Type   string `gorm:"column:type;comment:字典名（英）"` // 字典名（英）
-		Status *bool  `gorm:"column:status;comment:状态"`   // 状态
-		Desc   string `gorm:"column:desc;comment:描述"`     // 描述
+		Name        string `gorm:"comment:字典名（中）"` // 字典名（中）
+		Alias       string `gorm:"comment:字典名（英）"` // 字典名（英）
+		Status      bool   `gorm:"comment:状态"`     // 状态
+		Description string `gorm:"comment:描述"`     // 描述
 	}
 
 	return SysDictionary{}

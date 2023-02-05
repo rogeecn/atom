@@ -5,6 +5,7 @@ import (
 	_ "atom/providers/captcha/driver"
 	_ "atom/providers/config"
 	_ "atom/providers/database"
+	_ "atom/providers/dictionary"
 	_ "atom/providers/faker"
 	_ "atom/providers/http"
 	_ "atom/providers/jwt"
