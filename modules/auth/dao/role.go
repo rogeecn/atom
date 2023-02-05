@@ -15,6 +15,7 @@ type RoleDao interface {
 	UpdateByID(context.Context, *models.SysRole) (*models.SysRole, error)
 	DeleteByID(context.Context, uint64) error
 	DeletePermanentlyByID(context.Context, uint64) error
+	All(context.Context) ([]*models.SysRole, error)
 }
 
 type roleDaoImpl struct {
@@ -52,6 +53,11 @@ func (dao *roleDaoImpl) GetByFilter(ctx context.Context, filter dto.RoleRequestF
 	}
 
 	return items, uint64(total), nil
+}
+
+func (dao *roleDaoImpl) All(ctx context.Context) ([]*models.SysRole, error) {
+	role := dao.query.SysRole
+	return role.WithContext(ctx).Find()
 }
 
 func (dao *roleDaoImpl) FindByID(ctx context.Context, id uint64) (*models.SysRole, error) {

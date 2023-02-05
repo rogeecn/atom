@@ -25,7 +25,7 @@ func NewSysRoleSeeder() contracts.Seeder {
 }
 
 func (s *SysRoleSeeder) Run(faker *gofakeit.Faker, db *gorm.DB) {
-	times := 10
+	times := 50
 	for i := 0; i < times; i++ {
 		data := s.Generate(faker, i)
 		if i == 0 {
@@ -38,10 +38,27 @@ func (s *SysRoleSeeder) Run(faker *gofakeit.Faker, db *gorm.DB) {
 }
 
 func (s *SysRoleSeeder) Generate(faker *gofakeit.Faker, idx int) models.SysRole {
+	parentID := 0
+	if idx > 10 {
+		parentID = faker.IntRange(1, 10)
+	}
+
+	if idx > 20 {
+		parentID = faker.IntRange(10, 20)
+	}
+
+	if idx > 30 {
+		parentID = faker.IntRange(20, 30)
+	}
+
+	if idx > 40 {
+		parentID = faker.IntRange(30, 40)
+	}
+
 	return models.SysRole{
 		UUID:          faker.UUID(),
 		Name:          faker.Name(),
-		ParentID:      uint64(faker.IntRange(1, 100)),
+		ParentID:      uint64(parentID),
 		DefaultRouter: faker.Name(),
 	}
 }

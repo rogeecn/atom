@@ -13,6 +13,7 @@ import (
 type RoleService interface {
 	GetByFilter(context.Context, dto.RoleRequestFilter, request.PageFilter) (*response.PageResponse[*models.SysRole], error)
 	Create(context.Context, dto.RoleRequestForm) (*models.SysRole, error)
+	Tree(context.Context) ([]*dto.RoleTree, error)
 	UpdateByID(context.Context, uint64, dto.RoleRequestForm) (*models.SysRole, error)
 	DeleteByID(context.Context, uint64) error
 }
@@ -46,6 +47,32 @@ func (svc *roleService) GetByFilter(
 		Items: items,
 		Total: count,
 	}, nil
+}
+
+func (svc *roleService) treeMaker(ctx context.Context, models []*models.SysRole, pid uint64) []*dto.RoleTree {
+	items := []*dto.RoleTree{}
+	for _, model := range models {
+		if model.ParentID == pid {
+			items = append(items, &dto.RoleTree{
+				ID:            model.ID,
+				UUID:          model.UUID,
+				Name:          model.Name,
+				ParentID:      0,
+				DefaultRouter: model.DefaultRouter,
+				Children:      svc.treeMaker(ctx, models, model.ID),
+			})
+		}
+	}
+	return items
+}
+
+func (svc *roleService) Tree(ctx context.Context) ([]*dto.RoleTree, error) {
+	models, err := svc.dao.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return svc.treeMaker(ctx, models, 0), nil
 }
 
 func (svc *roleService) Create(ctx context.Context, req dto.RoleRequestForm) (*models.SysRole, error) {

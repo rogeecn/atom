@@ -40,6 +40,8 @@ func (r *Route) Register() {
 				gen.BindQuery(request.PageFilter{}, err.BindQueryFailed),
 			))
 
+			roleGroup.GET("/tree", gen.DataFunc(r.role.Tree))
+
 			roleGroup.POST("", gen.Func1(
 				r.role.Create,
 				gen.BindBody(dto.RoleRequestForm{}, err.BindBodyFailed),
