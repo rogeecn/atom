@@ -13,6 +13,7 @@ import (
 
 type Route struct {
 	svc        *http.Service
+	user       controller.UserController
 	role       controller.RoleController
 	permission controller.PermissionController
 }
@@ -20,11 +21,13 @@ type Route struct {
 func NewRoute(
 	svc *http.Service,
 	role controller.RoleController,
+	user controller.UserController,
 	permission controller.PermissionController,
 ) contracts.Route {
 	return &Route{
 		svc:        svc,
 		role:       role,
+		user:       user,
 		permission: permission,
 	}
 }
@@ -32,6 +35,12 @@ func NewRoute(
 func (r *Route) Register() {
 	group := r.svc.Engine.Group("auth")
 	{
+		// common functions
+		group.GET("/login", gen.DataFunc1(
+			r.user.Login,
+			gen.BindBody(dto.LoginRequestForm{}, err.BindBodyFailed),
+		))
+
 		roleGroup := group.Group("roles")
 		{
 			roleGroup.GET("", gen.DataFunc2(

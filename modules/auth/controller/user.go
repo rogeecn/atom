@@ -1,23 +1,48 @@
 package controller
 
 import (
+	"atom/modules/auth/dto"
+	"atom/modules/auth/service"
 	"atom/providers/config"
+	"atom/providers/jwt"
 
 	"github.com/gin-gonic/gin"
 )
 
 type UserController interface {
-	GetName(*gin.Context) (string, error)
+	Login(*gin.Context, dto.LoginRequestForm) (*dto.LoginResponse, error)
 }
 
 type userControllerImpl struct {
 	conf *config.Config
+	user service.UserService
+	jwt  *jwt.JWT
 }
 
-func NewUserController(conf *config.Config) UserController {
-	return &userControllerImpl{conf: conf}
+func NewUserController(
+	conf *config.Config,
+	user service.UserService,
+	jwt *jwt.JWT,
+) UserController {
+	return &userControllerImpl{
+		conf: conf,
+		user: user,
+		jwt:  jwt,
+	}
 }
 
-func (c *userControllerImpl) GetName(ctx *gin.Context) (string, error) {
-	return "User",nil
+func (c *userControllerImpl) Login(ctx *gin.Context, req dto.LoginRequestForm) (*dto.LoginResponse, error) {
+	user, err := c.user.AuthMatchPassword(ctx, &req)
+	if err != nil {
+		return nil, err
+	}
+
+	token, err := c.user.GenerateJWTTokenFromUser(ctx, user)
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.LoginResponse{
+		Token: token,
+	}, nil
 }

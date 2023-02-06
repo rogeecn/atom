@@ -27,11 +27,11 @@ type CustomClaims struct {
 }
 
 type BaseClaims struct {
-	UUID        uuid.UUID
-	UserID      uint
-	Username    string
-	NickName    string
-	AuthorityId uint
+	UUID     string
+	UserID   uint64
+	Username string
+	NickName string
+	RoleID   uint64
 }
 
 type JWT struct {
@@ -123,7 +123,7 @@ func (j *JWT) GetClaims(c *gin.Context) (*CustomClaims, error) {
 }
 
 // GetUserID 从Gin的Context中获取从jwt解析出来的用户ID
-func (j *JWT) GetUserID(c *gin.Context) uint {
+func (j *JWT) GetUserID(c *gin.Context) uint64 {
 	if claims, exists := c.Get("claims"); !exists {
 		if cl, err := j.GetClaims(c); err != nil {
 			return 0
@@ -137,10 +137,10 @@ func (j *JWT) GetUserID(c *gin.Context) uint {
 }
 
 // GetUserUuid 从Gin的Context中获取从jwt解析出来的用户UUID
-func (j *JWT) GetUserUuid(c *gin.Context) uuid.UUID {
+func (j *JWT) GetUserUuid(c *gin.Context) string {
 	if claims, exists := c.Get("claims"); !exists {
 		if cl, err := j.GetClaims(c); err != nil {
-			return uuid.UUID{}
+			return uuid.UUID{}.String()
 		} else {
 			return cl.UUID
 		}
@@ -151,16 +151,16 @@ func (j *JWT) GetUserUuid(c *gin.Context) uuid.UUID {
 }
 
 // GetUserAuthorityId 从Gin的Context中获取从jwt解析出来的用户角色id
-func (j *JWT) GetUserAuthorityId(c *gin.Context) uint {
+func (j *JWT) GetRoleId(c *gin.Context) uint64 {
 	if claims, exists := c.Get("claims"); !exists {
 		if cl, err := j.GetClaims(c); err != nil {
 			return 0
 		} else {
-			return cl.AuthorityId
+			return cl.RoleID
 		}
 	} else {
 		waitUse := claims.(*CustomClaims)
-		return waitUse.AuthorityId
+		return waitUse.RoleID
 	}
 }
 
