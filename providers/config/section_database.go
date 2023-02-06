@@ -7,9 +7,10 @@ import (
 // Database database config
 type Database struct {
 	Driver     string
-	MySQL      MySQL
-	Redis      Redis
-	PostgreSQL PostgreSQL
+	MySQL      *MySQL
+	SQLite     *SQLite
+	Redis      *Redis
+	PostgreSQL *PostgreSQL
 }
 
 // MySQL database config
@@ -90,4 +91,15 @@ type Redis struct {
 func (m *Redis) DSN() string {
 	dsnTpl := "%s:%d"
 	return fmt.Sprintf(dsnTpl, m.Host, m.Port)
+}
+
+type SQLite struct {
+	File string
+}
+
+func (m *SQLite) CreateDatabaseSql() string {
+	return ""
+}
+func (m *SQLite) EmptyDsn() string {
+	return m.File
 }

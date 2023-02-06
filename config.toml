@@ -89,7 +89,7 @@ ShowLine = true
 LogInConsole = true
 
 [Database]
-Driver = "mysql"
+Driver = "sqlite"
 
 [Database.MySQL]
 Host = "localhost"
@@ -102,6 +102,9 @@ Singular = false
 MaxIdleConns = 10
 MaxOpenConns = 200
 Engine = "InnoDB"
+
+[Database.SQLite]
+File = "sqlite.db"
 
 [Database.Redis]
 Host = "localhost"

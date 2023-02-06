@@ -5,3 +5,6 @@ __debug_bin
 tmp/
 docker-compose.yml
 atom
+sqlite.db
+go.work
+go.work.sum
