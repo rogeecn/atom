@@ -5,6 +5,7 @@ import (
 	"atom/providers/config"
 	"atom/providers/log"
 	"errors"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -25,6 +26,8 @@ type CustomClaims struct {
 	BufferTime int64
 	jwt.RegisteredClaims
 }
+
+const TOKEN_PREFIX = "Bearer "
 
 type BaseClaims struct {
 	UUID     string
@@ -85,6 +88,7 @@ func (j *JWT) CreateTokenByOldToken(oldToken string, claims CustomClaims) (strin
 
 // 解析 token
 func (j *JWT) ParseToken(tokenString string) (*CustomClaims, error) {
+	tokenString = strings.TrimPrefix(tokenString, TOKEN_PREFIX)
 	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (i interface{}, e error) {
 		return j.SigningKey, nil
 	})
@@ -114,10 +118,10 @@ func (j *JWT) ParseToken(tokenString string) (*CustomClaims, error) {
 }
 
 func (j *JWT) GetClaims(c *gin.Context) (*CustomClaims, error) {
-	token := c.Request.Header.Get("x-token")
+	token := c.Request.Header.Get("Authorization")
 	claims, err := j.ParseToken(token)
 	if err != nil {
-		log.Error("从Gin的Context中获取从jwt解析信息失败, 请检查请求头是否存在x-token且claims是否为规定结构")
+		log.Error("从Gin的Context中获取从jwt解析信息失败, 请检查请求头是否存在 Authorization 且 Claims 为规定结构")
 	}
 	return claims, err
 }
