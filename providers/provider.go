@@ -11,6 +11,7 @@ import (
 	_ "atom/providers/jwt"
 	_ "atom/providers/log"
 	_ "atom/providers/query"
+	_ "atom/providers/rbac"
 	_ "atom/providers/single_flight"
 	_ "atom/providers/uuid"
 )

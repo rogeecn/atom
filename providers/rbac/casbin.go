@@ -31,13 +31,8 @@ type CasbinInfo struct {
 	Method string `json:"method"` // 方法
 }
 
-func NewCasbin(
-	query *query.Query,
-	db *gorm.DB,
-) (IRbac, error) {
-	cb := &Casbin{
-		query: query,
-	}
+func NewCasbin(query *query.Query, db *gorm.DB) (IRbac, error) {
+	cb := &Casbin{query: query}
 
 	a, _ := gormadapter.NewAdapterByDB(db)
 	text := `
