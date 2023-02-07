@@ -51,7 +51,6 @@ OpenCaptchaTimeout = 3600
 [Http.JWT]
 SigningKey = "f3a0ed18-3eea-4bc9-b440-d56c3bb77bd8"
 ExpiresTime = "168h" # 7 days
-BufferTime = "24h"
 Issuer = "AtomFramework"
 
 [Http.Cors]

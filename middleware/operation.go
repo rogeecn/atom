@@ -26,7 +26,7 @@ func init() {
 	}
 }
 
-func OperationRecord(jwt *jwt.JWT) gin.HandlerFunc {
+func OperationRecord() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var body []byte
 		var userId int64
@@ -51,9 +51,16 @@ func OperationRecord(jwt *jwt.JWT) gin.HandlerFunc {
 			}
 			body, _ = json.Marshal(&m)
 		}
-		claims, _ := jwt.GetClaims(c)
-		if claims.UserID != 0 {
-			userId = int64(claims.UserID)
+
+		claimsCtx, exists := c.Get(jwt.CtxKey)
+		if !exists {
+			c.Next()
+			return
+		}
+
+		claims := claimsCtx.(jwt.Claims)
+		if claims.UID != 0 {
+			userId = int64(claims.UID)
 		} else {
 			id, err := strconv.Atoi(c.Request.Header.Get("x-user-id"))
 			if err != nil {

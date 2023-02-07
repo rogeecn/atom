@@ -59,10 +59,7 @@ func (svc *userService) AuthMatchPassword(ctx context.Context, req *dto.LoginReq
 
 func (svc *userService) GenerateJWTTokenFromUser(ctx context.Context, user *models.User) (string, error) {
 	return svc.jwt.CreateToken(svc.jwt.CreateClaims(jwt.BaseClaims{
-		UUID:     user.UUID,
-		UserID:   user.ID,
-		Username: user.Username,
-		NickName: user.Nickname,
-		RoleID:   user.RoleID,
+		UID:  user.ID,
+		Role: user.RoleID,
 	}))
 }

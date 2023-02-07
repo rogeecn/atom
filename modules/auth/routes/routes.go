@@ -68,9 +68,9 @@ func (r *Route) Register() {
 			))
 		}
 
-		permissionGroup := group.Group("permission")
+		permissionGroup := group.Group("permissions")
 		{
-			permissionGroup.GET("/permissions", gen.DataFunc(r.permission.Get))
+			permissionGroup.GET("", gen.DataFunc(r.permission.Get))
 		}
 
 	}
