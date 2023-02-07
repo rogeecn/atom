@@ -1,23 +1,38 @@
 package controller
 
 import (
-	"atom/providers/config"
+	"atom/providers/jwt"
+	"atom/providers/rbac"
 
 	"github.com/gin-gonic/gin"
 )
 
 type PermissionController interface {
-	GetName(*gin.Context) (string, error)
+	Get(ctx *gin.Context) (string, error)
 }
 
 type permissionControllerImpl struct {
-	conf *config.Config
+	jwt  *jwt.JWT
+	rbac rbac.IRbac
 }
 
-func NewPermissionController(conf *config.Config) PermissionController {
-	return &permissionControllerImpl{conf: conf}
+func NewPermissionController(
+	jwt *jwt.JWT,
+	rbac rbac.IRbac,
+) PermissionController {
+	return &permissionControllerImpl{rbac: rbac, jwt: jwt}
 }
 
-func (c *permissionControllerImpl) GetName(ctx *gin.Context) (string, error) {
-	return "Permission",nil
+func (c *permissionControllerImpl) Get(ctx *gin.Context) (string, error) {
+	claims, err := c.jwt.GetClaims(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	perm, err := c.rbac.JsonPermissionsForUser(claims.Username)
+	if err != nil {
+		return "", err
+	}
+
+	return perm, nil
 }

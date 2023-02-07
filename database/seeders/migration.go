@@ -25,16 +25,16 @@ func NewMigrationSeeder() contracts.Seeder {
 }
 
 func (s *MigrationSeeder) Run(faker *gofakeit.Faker, db *gorm.DB) {
-	times := 10
-	for i := 0; i < times; i++ {
-		data := s.Generate(faker, i)
-		if i == 0 {
-			stmt := &gorm.Statement{DB: db}
-			_ = stmt.Parse(&data)
-			log.Printf("seeding %s for %d times", stmt.Schema.Table, times)
-		}
-		db.Create(&data)
-	}
+	// times := 10
+	// for i := 0; i < times; i++ {
+	// 	data := s.Generate(faker, i)
+	// 	if i == 0 {
+	// 		stmt := &gorm.Statement{DB: db}
+	// 		_ = stmt.Parse(&data)
+	// 		log.Printf("seeding %s for %d times", stmt.Schema.Table, times)
+	// 	}
+	// 	db.Create(&data)
+	// }
 }
 
 func (s *MigrationSeeder) Generate(faker *gofakeit.Faker, idx int) models.Migration {

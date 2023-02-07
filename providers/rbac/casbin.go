@@ -71,6 +71,10 @@ func (cb *Casbin) Reload() error {
 	return nil
 }
 
+func (cb *Casbin) JsonPermissionsForUser(username string) (string, error) {
+	return casbin.CasbinJsGetPermissionForUser(cb.enforcer, username)
+}
+
 func (cb *Casbin) Update(roleID uint, infos []CasbinInfo) error {
 	roleIdStr := strconv.Itoa(int(roleID))
 	cb.Clear(0, roleIdStr)

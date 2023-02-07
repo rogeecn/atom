@@ -14,6 +14,11 @@ import (
 	"golang.org/x/sync/singleflight"
 )
 
+const (
+	CtxKey     = "claims"
+	HttpHeader = "Authorization"
+)
+
 func init() {
 	if err := container.Container.Provide(NewJWT); err != nil {
 		log.Fatal(err)
@@ -118,7 +123,7 @@ func (j *JWT) ParseToken(tokenString string) (*CustomClaims, error) {
 }
 
 func (j *JWT) GetClaims(c *gin.Context) (*CustomClaims, error) {
-	token := c.Request.Header.Get("Authorization")
+	token := c.Request.Header.Get(HttpHeader)
 	claims, err := j.ParseToken(token)
 	if err != nil {
 		log.Error("从Gin的Context中获取从jwt解析信息失败, 请检查请求头是否存在 Authorization 且 Claims 为规定结构")
@@ -128,7 +133,7 @@ func (j *JWT) GetClaims(c *gin.Context) (*CustomClaims, error) {
 
 // GetUserID 从Gin的Context中获取从jwt解析出来的用户ID
 func (j *JWT) GetUserID(c *gin.Context) uint64 {
-	if claims, exists := c.Get("claims"); !exists {
+	if claims, exists := c.Get(CtxKey); !exists {
 		if cl, err := j.GetClaims(c); err != nil {
 			return 0
 		} else {
@@ -142,7 +147,7 @@ func (j *JWT) GetUserID(c *gin.Context) uint64 {
 
 // GetUserUuid 从Gin的Context中获取从jwt解析出来的用户UUID
 func (j *JWT) GetUserUuid(c *gin.Context) string {
-	if claims, exists := c.Get("claims"); !exists {
+	if claims, exists := c.Get(CtxKey); !exists {
 		if cl, err := j.GetClaims(c); err != nil {
 			return uuid.UUID{}.String()
 		} else {
@@ -156,7 +161,7 @@ func (j *JWT) GetUserUuid(c *gin.Context) string {
 
 // GetUserAuthorityId 从Gin的Context中获取从jwt解析出来的用户角色id
 func (j *JWT) GetRoleId(c *gin.Context) uint64 {
-	if claims, exists := c.Get("claims"); !exists {
+	if claims, exists := c.Get(CtxKey); !exists {
 		if cl, err := j.GetClaims(c); err != nil {
 			return 0
 		} else {
