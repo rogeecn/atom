@@ -10,11 +10,7 @@ import (
 	"github.com/rogeecn/gen"
 )
 
-type PermissionController interface {
-	Get(ctx *gin.Context) (string, error)
-}
-
-type permissionControllerImpl struct {
+type PermissionController struct {
 	jwt  *jwt.JWT
 	rbac rbac.IRbac
 }
@@ -22,11 +18,11 @@ type permissionControllerImpl struct {
 func NewPermissionController(
 	jwt *jwt.JWT,
 	rbac rbac.IRbac,
-) PermissionController {
-	return &permissionControllerImpl{rbac: rbac, jwt: jwt}
+) *PermissionController {
+	return &PermissionController{rbac: rbac, jwt: jwt}
 }
 
-func (c *permissionControllerImpl) Get(ctx *gin.Context) (string, error) {
+func (c *PermissionController) Get(ctx *gin.Context) (string, error) {
 	claimsCtx, exists := ctx.Get(jwt.CtxKey)
 	if !exists {
 		return "", gen.NewBusError(http.StatusBadRequest, http.StatusBadRequest, "Token 获取失败")

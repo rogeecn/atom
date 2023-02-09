@@ -4,13 +4,10 @@ import (
 	"atom/modules/system/dao"
 )
 
-type SystemService interface {
-}
-
-type systemService struct {
+type SystemService struct {
 	dao dao.Dao
 }
 
-func NewSystemService(dao dao.Dao) SystemService {
-	return &systemService{dao: dao}
+func NewSystemService(dao dao.Dao) *SystemService {
+	return &SystemService{dao: dao}
 }

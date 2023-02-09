@@ -23,7 +23,7 @@ import (
 type RoleInjectParams struct {
 	dig.In
 	DB    *gorm.DB
-	Dao   RoleDao
+	Dao   *RoleDao
 	Query *query.Query
 	Faker *gofakeit.Faker
 }

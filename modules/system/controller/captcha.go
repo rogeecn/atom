@@ -7,11 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type CaptchaController interface {
-	Show(*gin.Context) (*captcha.CaptchaResponse, error)
-}
-
-type captchaControllerImpl struct {
+type CaptchaController struct {
 	conf    *config.Config
 	captcha *captcha.Captcha
 }
@@ -19,13 +15,13 @@ type captchaControllerImpl struct {
 func NewCaptchaController(
 	conf *config.Config,
 	captcha *captcha.Captcha,
-) CaptchaController {
-	return &captchaControllerImpl{
+) *CaptchaController {
+	return &CaptchaController{
 		conf:    conf,
 		captcha: captcha,
 	}
 }
 
-func (c *captchaControllerImpl) Show(ctx *gin.Context) (*captcha.CaptchaResponse, error) {
+func (c *CaptchaController) Show(ctx *gin.Context) (*captcha.CaptchaResponse, error) {
 	return c.captcha.Generate()
 }

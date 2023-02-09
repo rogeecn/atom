@@ -9,11 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type UserController interface {
-	Login(*gin.Context, dto.LoginRequestForm) (*dto.LoginResponse, error)
-}
-
-type userControllerImpl struct {
+type UserController struct {
 	conf *config.Config
 	user service.UserService
 	jwt  *jwt.JWT
@@ -23,15 +19,15 @@ func NewUserController(
 	conf *config.Config,
 	user service.UserService,
 	jwt *jwt.JWT,
-) UserController {
-	return &userControllerImpl{
+) *UserController {
+	return &UserController{
 		conf: conf,
 		user: user,
 		jwt:  jwt,
 	}
 }
 
-func (c *userControllerImpl) Login(ctx *gin.Context, req dto.LoginRequestForm) (*dto.LoginResponse, error) {
+func (c *UserController) Login(ctx *gin.Context, req dto.LoginRequestForm) (*dto.LoginResponse, error) {
 	user, err := c.user.AuthMatchPassword(ctx, &req)
 	if err != nil {
 		return nil, err

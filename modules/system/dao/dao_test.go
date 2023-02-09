@@ -48,7 +48,7 @@ func TestDaoImpl_Release(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := &DaoImpl{
+			c := &Dao{
 				Conf: tt.fields.Conf,
 				DB:   tt.fields.DB,
 			}

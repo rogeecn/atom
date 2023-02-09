@@ -24,7 +24,7 @@ type UserInjectParams struct {
 	dig.In
 
 	DB    *gorm.DB
-	Dao   UserDao
+	Dao   *UserDao
 	Query *query.Query
 	Faker *gofakeit.Faker
 }

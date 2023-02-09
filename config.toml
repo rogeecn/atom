@@ -88,12 +88,12 @@ ShowLine = true
 LogInConsole = true
 
 [Database]
-Driver = "sqlite"
+Driver = "mysql"
 
 [Database.MySQL]
-Host = "localhost"
+Host = "10.47.119.226"
 Port = 3306
-Database = "demos11"
+Database = "atom"
 Username = "root"
 Password = "root"
 Prefix = ""
@@ -106,8 +106,7 @@ Engine = "InnoDB"
 File = "sqlite.db"
 
 [Database.Redis]
-Host = "localhost"
-Port = 3306
+Host = "10.47.119.226"
+Port = 6379
 Database = 0
-Username = ""
 Password = ""

@@ -10,15 +10,7 @@ import (
 	"context"
 )
 
-type RoleService interface {
-	GetByFilter(context.Context, dto.RoleRequestFilter, request.PageFilter) (*response.PageResponse[*models.SysRole], error)
-	Create(context.Context, dto.RoleRequestForm) (*models.SysRole, error)
-	Tree(context.Context) ([]*dto.RoleTree, error)
-	UpdateByID(context.Context, uint64, dto.RoleRequestForm) (*models.SysRole, error)
-	DeleteByID(context.Context, uint64) error
-}
-
-type roleService struct {
+type RoleService struct {
 	dao  dao.RoleDao
 	uuid *uuid.Generator
 }
@@ -26,14 +18,14 @@ type roleService struct {
 func NewRoleService(
 	dao dao.RoleDao,
 	uuid *uuid.Generator,
-) RoleService {
-	return &roleService{
+) *RoleService {
+	return &RoleService{
 		dao:  dao,
 		uuid: uuid,
 	}
 }
 
-func (svc *roleService) GetByFilter(
+func (svc *RoleService) GetByFilter(
 	ctx context.Context,
 	filter dto.RoleRequestFilter,
 	page request.PageFilter,
@@ -49,7 +41,7 @@ func (svc *roleService) GetByFilter(
 	}, nil
 }
 
-func (svc *roleService) treeMaker(ctx context.Context, models []*models.SysRole, pid uint64) []*dto.RoleTree {
+func (svc *RoleService) treeMaker(ctx context.Context, models []*models.SysRole, pid uint64) []*dto.RoleTree {
 	items := []*dto.RoleTree{}
 	for _, model := range models {
 		if model.ParentID == pid {
@@ -66,7 +58,7 @@ func (svc *roleService) treeMaker(ctx context.Context, models []*models.SysRole,
 	return items
 }
 
-func (svc *roleService) Tree(ctx context.Context) ([]*dto.RoleTree, error) {
+func (svc *RoleService) Tree(ctx context.Context) ([]*dto.RoleTree, error) {
 	models, err := svc.dao.All(ctx)
 	if err != nil {
 		return nil, err
@@ -75,7 +67,7 @@ func (svc *roleService) Tree(ctx context.Context) ([]*dto.RoleTree, error) {
 	return svc.treeMaker(ctx, models, 0), nil
 }
 
-func (svc *roleService) Create(ctx context.Context, req dto.RoleRequestForm) (*models.SysRole, error) {
+func (svc *RoleService) Create(ctx context.Context, req dto.RoleRequestForm) (*models.SysRole, error) {
 	model := models.SysRole{
 		UUID:          svc.uuid.MustGenerate(),
 		Name:          req.Name,
@@ -84,7 +76,7 @@ func (svc *roleService) Create(ctx context.Context, req dto.RoleRequestForm) (*m
 	}
 	return svc.dao.Create(ctx, &model)
 }
-func (svc *roleService) UpdateByID(ctx context.Context, id uint64, req dto.RoleRequestForm) (*models.SysRole, error) {
+func (svc *RoleService) UpdateByID(ctx context.Context, id uint64, req dto.RoleRequestForm) (*models.SysRole, error) {
 	model, err := svc.dao.FindByID(ctx, id)
 	if err != nil {
 		return nil, err
@@ -97,6 +89,6 @@ func (svc *roleService) UpdateByID(ctx context.Context, id uint64, req dto.RoleR
 	return svc.dao.UpdateByID(ctx, model)
 }
 
-func (svc *roleService) DeleteByID(ctx context.Context, id uint64) error {
+func (svc *RoleService) DeleteByID(ctx context.Context, id uint64) error {
 	return svc.dao.DeleteByID(ctx, id)
 }
