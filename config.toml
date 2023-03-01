@@ -88,7 +88,7 @@ ShowLine = true
 LogInConsole = true
 
 [Database]
-Driver = "postgres"
+Driver = "sqlite"
 
 [Database.MySQL]
 Host = "10.47.119.226"
@@ -116,7 +116,7 @@ MaxIdleConns = 10
 MaxOpenConns = 200
 
 [Database.SQLite]
-File = "sqlite.db"
+File = "data.db"
 
 [Database.Redis]
 Host = "10.47.119.226"

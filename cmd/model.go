@@ -51,7 +51,10 @@ var modelCmd = &cobra.Command{
 					log.Fatal(err)
 				}
 			case database.DriverSQLite:
-
+				err := gq.DB.Raw("SELECT name FROM sqlite_master WHERE type='table'").Scan(&tables).Error
+				if err != nil {
+					log.Fatal(err)
+				}
 			}
 
 			if len(tables) == 0 {
