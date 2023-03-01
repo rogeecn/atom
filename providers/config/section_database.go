@@ -58,25 +58,29 @@ func (m *MySQL) DSN() string {
 }
 
 type PostgreSQL struct {
-	User     string
-	Password string
-	Database string
-	Host     string
-	Port     uint
-	SslMode  string
-	TimeZone string
+	Username     string
+	Password     string
+	Database     string
+	Host         string
+	Port         uint
+	SslMode      string
+	TimeZone     string
+	Prefix       string // 表前缀
+	Singular     bool   //是否开启全局禁用复数，true表示开启
+	MaxIdleConns int    // 空闲中的最大连接数
+	MaxOpenConns int    // 打开到数据库的最大连接数
 }
 
 func (m *PostgreSQL) EmptyDsn() string {
 	dsnTpl := "host=%s user=%s password=%s port=%d dbname=postgres sslmode=disable TimeZone=Asia/Shanghai"
 
-	return fmt.Sprintf(dsnTpl, m.Host, m.User, m.Password, m.Port)
+	return fmt.Sprintf(dsnTpl, m.Host, m.Username, m.Password, m.Port)
 }
 
 // DSN connection dsn
 func (m *PostgreSQL) DSN() string {
 	dsnTpl := "host=%s user=%s password=%s dbname=%s port=%d sslmode=%s TimeZone=%s"
-	return fmt.Sprintf(dsnTpl, m.Host, m.User, m.Password, m.Database, m.Port, m.SslMode, m.TimeZone)
+	return fmt.Sprintf(dsnTpl, m.Host, m.Username, m.Password, m.Database, m.Port, m.SslMode, m.TimeZone)
 }
 
 type Redis struct {

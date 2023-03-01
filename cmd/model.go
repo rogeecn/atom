@@ -5,6 +5,8 @@ package cmd
 
 import (
 	"atom/container"
+	"atom/providers/config"
+	"atom/providers/database"
 	"errors"
 	"log"
 
@@ -18,7 +20,8 @@ import (
 type GenQueryGenerator struct {
 	dig.In
 
-	DB *gorm.DB
+	Config *config.Config
+	DB     *gorm.DB
 }
 
 // // Dynamic SQL
@@ -35,10 +38,22 @@ var modelCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return container.Container.Invoke(func(gq GenQueryGenerator) error {
 			var tables []string
-			err := gq.DB.Raw("show tables").Scan(&tables).Error
-			if err != nil {
-				log.Fatal(err)
+
+			switch gq.Config.Database.Driver {
+			case database.DriverMySQL:
+				err := gq.DB.Raw("show tables").Scan(&tables).Error
+				if err != nil {
+					log.Fatal(err)
+				}
+			case database.DriverPostgres:
+				err := gq.DB.Raw("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'").Scan(&tables).Error
+				if err != nil {
+					log.Fatal(err)
+				}
+			case database.DriverSQLite:
+
 			}
+
 			if len(tables) == 0 {
 				return errors.New("no tables in database, run migrate first")
 			}

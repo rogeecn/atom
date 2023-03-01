@@ -88,7 +88,7 @@ ShowLine = true
 LogInConsole = true
 
 [Database]
-Driver = "mysql"
+Driver = "postgres"
 
 [Database.MySQL]
 Host = "10.47.119.226"
@@ -101,6 +101,19 @@ Singular = false
 MaxIdleConns = 10
 MaxOpenConns = 200
 Engine = "InnoDB"
+
+[Database.PostgreSQL]
+Host = "10.95.31.212"
+Port = 5442
+Database = "cspm"
+Username = "postgres"
+Password = "zHTz7H6S9WJQK7Y0"
+Prefix = ""
+TimeZone = "Asia/Shanghai"
+SslMode = "disable"
+Singular = false
+MaxIdleConns = 10
+MaxOpenConns = 200
 
 [Database.SQLite]
 File = "sqlite.db"
