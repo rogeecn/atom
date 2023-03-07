@@ -36,7 +36,7 @@ func CheckPermission(config *config.Config, rbac rbac.IRbac) gin.HandlerFunc {
 		// 获取用户的角色
 		role := strconv.Itoa(int(claims.Role))
 
-		if rbac.Can(role, method, path) == false {
+		if !rbac.Can(role, method, path) {
 			gen.NewBusError(http.StatusForbidden, http.StatusForbidden, "未登录或非法访问").JSON(c, false)
 			c.Abort()
 			return

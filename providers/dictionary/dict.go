@@ -6,7 +6,6 @@ import (
 	"context"
 	"errors"
 	"log"
-	"time"
 )
 
 type Dict struct {
@@ -37,9 +36,8 @@ func NewDictionary(query *query.Query) (*Dict, error) {
 }
 
 func (dict *Dict) Load() error {
-	ctx, _ := context.WithTimeout(context.Background(), time.Second*5)
 	dictTable := dict.query.SysDictionary
-	items, err := dictTable.WithContext(ctx).Where(dictTable.Status.Is(true)).Find()
+	items, err := dictTable.WithContext(context.Background()).Where(dictTable.Status.Is(true)).Find()
 	if err != nil {
 		return err
 	}
@@ -50,9 +48,8 @@ func (dict *Dict) Load() error {
 		dict.mapAlias[item.Alias_] = item.ID
 	}
 
-	ctx, _ = context.WithTimeout(context.Background(), time.Second*5)
 	dictDetailTable := dict.query.SysDictionaryDetail
-	dictItems, err := dictDetailTable.WithContext(ctx).
+	dictItems, err := dictDetailTable.WithContext(context.Background()).
 		Where(dictDetailTable.Status.Is(true)).
 		Where(dictDetailTable.ID.In(ids...)).
 		Order(dictDetailTable.Weight.Desc()).
