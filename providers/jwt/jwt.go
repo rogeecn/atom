@@ -56,7 +56,7 @@ func NewJWT(config *config.Config) (*JWT, error) {
 	}, nil
 }
 
-func (j *JWT) CreateClaims(baseClaims BaseClaims) Claims {
+func (j *JWT) CreateClaims(baseClaims BaseClaims) *Claims {
 	ep, _ := time.ParseDuration(j.config.Http.JWT.ExpiresTime)
 	claims := Claims{
 		BaseClaims: baseClaims,
@@ -66,17 +66,17 @@ func (j *JWT) CreateClaims(baseClaims BaseClaims) Claims {
 			Issuer:    j.config.Http.JWT.Issuer,                              // 签名的发行者
 		},
 	}
-	return claims
+	return &claims
 }
 
 // 创建一个token
-func (j *JWT) CreateToken(claims Claims) (string, error) {
+func (j *JWT) CreateToken(claims *Claims) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(j.SigningKey)
 }
 
 // CreateTokenByOldToken 旧token 换新token 使用归并回源避免并发问题
-func (j *JWT) CreateTokenByOldToken(oldToken string, claims Claims) (string, error) {
+func (j *JWT) CreateTokenByOldToken(oldToken string, claims *Claims) (string, error) {
 	v, err, _ := j.singleflight.Do("JWT:"+oldToken, func() (interface{}, error) {
 		return j.CreateToken(claims)
 	})
@@ -108,7 +108,6 @@ func (j *JWT) ParseToken(tokenString string) (*Claims, error) {
 			return claims, nil
 		}
 		return nil, TokenInvalid
-
 	} else {
 		return nil, TokenInvalid
 	}

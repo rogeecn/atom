@@ -2,8 +2,8 @@ package database
 
 import (
 	"atom/providers/config"
+	"atom/providers/log"
 	"database/sql"
-	"fmt"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -53,7 +53,7 @@ func NewMySQL(conf *config.MySQL) (*gorm.DB, error) {
 }
 
 // createDatabase 创建数据库
-func createMySQLDatabase(dsn string, driver string, createSql string) error {
+func createMySQLDatabase(dsn, driver, createSql string) error {
 	db, err := sql.Open(driver, dsn)
 	if err != nil {
 		return err
@@ -61,10 +61,11 @@ func createMySQLDatabase(dsn string, driver string, createSql string) error {
 	defer func(db *sql.DB) {
 		err = db.Close()
 		if err != nil {
-			fmt.Println(err)
+			log.Error(err)
 		}
 	}(db)
-	if err = db.Ping(); err != nil {
+	err = db.Ping()
+	if err != nil {
 		return err
 	}
 	_, err = db.Exec(createSql)

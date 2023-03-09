@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func Move(src string, dst string) (err error) {
+func Move(src, dst string) (err error) {
 	if dst == "" {
 		return nil
 	}
@@ -48,8 +48,7 @@ func TrimSpace(target interface{}) {
 	t = t.Elem()
 	v := reflect.ValueOf(target).Elem()
 	for i := 0; i < t.NumField(); i++ {
-		switch v.Field(i).Kind() {
-		case reflect.String:
+		if v.Field(i).Kind() == reflect.String {
 			v.Field(i).SetString(strings.TrimSpace(v.Field(i).String()))
 		}
 	}

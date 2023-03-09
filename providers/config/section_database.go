@@ -21,10 +21,10 @@ type MySQL struct {
 	Username     string
 	Password     string
 	Prefix       string // 表前缀
-	Singular     bool   //是否开启全局禁用复数，true表示开启
+	Singular     bool   // 是否开启全局禁用复数，true表示开启
 	MaxIdleConns int    // 空闲中的最大连接数
 	MaxOpenConns int    // 打开到数据库的最大连接数
-	Engine       string //数据库引擎，默认InnoDB
+	Engine       string // 数据库引擎，默认InnoDB
 }
 
 func (m *MySQL) CreateDatabaseSql() string {
@@ -66,7 +66,7 @@ type PostgreSQL struct {
 	SslMode      string
 	TimeZone     string
 	Prefix       string // 表前缀
-	Singular     bool   //是否开启全局禁用复数，true表示开启
+	Singular     bool   // 是否开启全局禁用复数，true表示开启
 	MaxIdleConns int    // 空闲中的最大连接数
 	MaxOpenConns int    // 打开到数据库的最大连接数
 }

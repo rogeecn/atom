@@ -13,8 +13,8 @@ type Dao struct {
 	DB   *gorm.DB
 }
 
-func NewDao(DB *gorm.DB) *Dao {
-	return &Dao{DB: DB}
+func NewDao(db *gorm.DB) *Dao {
+	return &Dao{DB: db}
 }
 
 func (c *Dao) Release(ctx context.Context, a int, b string) error {

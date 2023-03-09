@@ -33,7 +33,6 @@ func NewCaptcha(conf *config.Config, driver base64Captcha.Driver) (*Captcha, err
 		conf:    conf,
 		captcha: base64Captcha.NewCaptcha(driver, store),
 	}, nil
-
 }
 
 func (c *Captcha) Generate() (*CaptchaResponse, error) {

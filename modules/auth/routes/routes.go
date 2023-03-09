@@ -42,36 +42,31 @@ func (r *Route) Register() {
 		))
 
 		roleGroup := group.Group("roles")
-		{
-			roleGroup.GET("", gen.DataFunc2(
-				r.role.GetByFilter,
-				gen.BindQuery(dto.RoleRequestFilter{}, err.BindQueryFailed),
-				gen.BindQuery(request.PageFilter{}, err.BindQueryFailed),
-			))
+		roleGroup.GET("", gen.DataFunc2(
+			r.role.GetByFilter,
+			gen.BindQuery(dto.RoleRequestFilter{}, err.BindQueryFailed),
+			gen.BindQuery(request.PageFilter{}, err.BindQueryFailed),
+		))
 
-			roleGroup.GET("/tree", gen.DataFunc(r.role.Tree))
+		roleGroup.GET("/tree", gen.DataFunc(r.role.Tree))
 
-			roleGroup.POST("", gen.Func1(
-				r.role.Create,
-				gen.BindBody(dto.RoleRequestForm{}, err.BindBodyFailed),
-			))
+		roleGroup.POST("", gen.Func1(
+			r.role.Create,
+			gen.BindBody(dto.RoleRequestForm{}, err.BindBodyFailed),
+		))
 
-			roleGroup.PUT("/:id", gen.Func2(
-				r.role.UpdateByID,
-				gen.Int("role_id", err.BindPathFailed.Format("id")),
-				gen.BindBody(dto.RoleRequestForm{}, err.BindBodyFailed),
-			))
+		roleGroup.PUT("/:id", gen.Func2(
+			r.role.UpdateByID,
+			gen.Int("role_id", err.BindPathFailed.Format("id")),
+			gen.BindBody(dto.RoleRequestForm{}, err.BindBodyFailed),
+		))
 
-			roleGroup.DELETE("/:id", gen.Func1(
-				r.role.Delete,
-				gen.Int("role_id", err.BindPathFailed.Format("id")),
-			))
-		}
+		roleGroup.DELETE("/:id", gen.Func1(
+			r.role.Delete,
+			gen.Int("role_id", err.BindPathFailed.Format("id")),
+		))
 
 		permissionGroup := group.Group("permissions")
-		{
-			permissionGroup.GET("", gen.DataFunc(r.permission.Get))
-		}
-
+		permissionGroup.GET("", gen.DataFunc(r.permission.Get))
 	}
 }

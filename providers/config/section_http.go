@@ -42,10 +42,10 @@ type Whitelist struct {
 	AllowCredentials bool
 }
 
-func (h Http) Address() string {
+func (h *Http) Address() string {
 	return fmt.Sprintf("%s:%d", h.Host, h.Port)
 }
 
-func (h Http) PortString() string {
+func (h *Http) PortString() string {
 	return fmt.Sprintf(":%d", h.Port)
 }

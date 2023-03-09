@@ -50,11 +50,9 @@ func CorsByRules(config *config.Config) gin.HandlerFunc {
 		// 严格白名单模式且未通过检查，直接拒绝处理请求
 		if whitelist == nil && config.Http.Cors.Mode == "strict-whitelist" && !(c.Request.Method == "GET" && c.Request.URL.Path == "/health") {
 			c.AbortWithStatus(http.StatusForbidden)
-		} else {
+		} else if c.Request.Method == http.MethodOptions {
 			// 非严格白名单模式，无论是否通过检查均放行所有 OPTIONS 方法
-			if c.Request.Method == http.MethodOptions {
-				c.AbortWithStatus(http.StatusNoContent)
-			}
+			c.AbortWithStatus(http.StatusNoContent)
 		}
 
 		// 处理请求

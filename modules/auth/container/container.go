@@ -12,7 +12,6 @@ import (
 )
 
 func init() {
-
 	// controller
 	if err := container.Container.Provide(controller.NewRoleController); err != nil {
 		log.Fatal(err)
@@ -26,7 +25,7 @@ func init() {
 		log.Fatal(err)
 	}
 
-	//service
+	// service
 	if err := container.Container.Provide(service.NewRoleService); err != nil {
 		log.Fatal(err)
 	}

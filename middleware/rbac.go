@@ -27,7 +27,7 @@ func CheckPermission(config *config.Config, rbac rbac.IRbac) gin.HandlerFunc {
 		}
 		claims := claimsCtx.(jwt.Claims)
 
-		//获取请求的PATH
+		// 获取请求的PATH
 		path := c.Request.URL.Path
 
 		// 获取请求方法

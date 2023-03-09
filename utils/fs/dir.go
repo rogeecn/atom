@@ -20,13 +20,15 @@ func PathExists(path string) (bool, error) {
 }
 
 func CreateDir(dirs ...string) (err error) {
+	var exist bool
 	for _, v := range dirs {
-		exist, err := PathExists(v)
+		exist, err = PathExists(v)
 		if err != nil {
 			return err
 		}
 		if !exist {
-			if err := os.MkdirAll(v, os.ModePerm); err != nil {
+			err = os.MkdirAll(v, os.ModePerm)
+			if err != nil {
 				return err
 			}
 		}
