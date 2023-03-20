@@ -13,16 +13,16 @@ import (
 
 type Route struct {
 	svc        *http.Service
-	user       controller.UserController
-	role       controller.RoleController
-	permission controller.PermissionController
+	user       *controller.UserController
+	role       *controller.RoleController
+	permission *controller.PermissionController
 }
 
 func NewRoute(
 	svc *http.Service,
-	role controller.RoleController,
-	user controller.UserController,
-	permission controller.PermissionController,
+	role *controller.RoleController,
+	user *controller.UserController,
+	permission *controller.PermissionController,
 ) contracts.Route {
 	return &Route{
 		svc:        svc,

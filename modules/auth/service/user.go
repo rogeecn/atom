@@ -9,14 +9,14 @@ import (
 )
 
 type UserService struct {
-	userRoleDao dao.UserRoleDao
-	userDao     dao.UserDao
+	userRoleDao *dao.UserRoleDao
+	userDao     *dao.UserDao
 	jwt         *jwt.JWT
 }
 
 func NewUserService(
-	userRoleDao dao.UserRoleDao,
-	userDao dao.UserDao,
+	userRoleDao *dao.UserRoleDao,
+	userDao *dao.UserDao,
 	jwt *jwt.JWT,
 ) *UserService {
 	return &UserService{

@@ -11,13 +11,13 @@ import (
 
 type UserController struct {
 	conf *config.Config
-	user service.UserService
+	user *service.UserService
 	jwt  *jwt.JWT
 }
 
 func NewUserController(
 	conf *config.Config,
-	user service.UserService,
+	user *service.UserService,
 	jwt *jwt.JWT,
 ) *UserController {
 	return &UserController{

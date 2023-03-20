@@ -9,11 +9,11 @@ import (
 )
 
 type Route struct {
-	captcha controller.CaptchaController
+	captcha *controller.CaptchaController
 	svc     *http.Service
 }
 
-func NewRoute(captcha controller.CaptchaController, svc *http.Service) contracts.Route {
+func NewRoute(captcha *controller.CaptchaController, svc *http.Service) contracts.Route {
 	return &Route{captcha: captcha, svc: svc}
 }
 

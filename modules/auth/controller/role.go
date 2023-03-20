@@ -11,11 +11,11 @@ import (
 )
 
 type RoleController struct {
-	roleSvc service.RoleService
+	roleSvc *service.RoleService
 }
 
 func NewRoleController(
-	roleSvc service.RoleService,
+	roleSvc *service.RoleService,
 ) *RoleController {
 	return &RoleController{
 		roleSvc: roleSvc,

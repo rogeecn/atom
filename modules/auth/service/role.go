@@ -11,12 +11,12 @@ import (
 )
 
 type RoleService struct {
-	dao  dao.RoleDao
+	dao  *dao.RoleDao
 	uuid *uuid.Generator
 }
 
 func NewRoleService(
-	dao dao.RoleDao,
+	dao *dao.RoleDao,
 	uuid *uuid.Generator,
 ) *RoleService {
 	return &RoleService{
