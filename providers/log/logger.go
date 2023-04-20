@@ -8,13 +8,13 @@ import (
 )
 
 func Provide(config *Config, opts ...dig.ProvideOption) error {
+	logger, err := newZapLogger(config)
+	if err != nil {
+		return err
+	}
+	defaultLogger = logger
 	return container.Container.Provide(func() (*Logger, error) {
-		logger, err := newZapLogger(config)
-		if err != nil {
-			return nil, err
-		}
-		defaultLogger = logger
-		return logger, nil
+		return defaultLogger, nil
 	}, opts...)
 }
 

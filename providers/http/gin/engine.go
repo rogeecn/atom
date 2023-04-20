@@ -21,6 +21,10 @@ func (e *Service) Use(middleware ...gin.HandlerFunc) gin.IRoutes {
 	return e.Engine.Use(middleware...)
 }
 
+func (e *Service) GetEngine() interface{} {
+	return e.Engine
+}
+
 func (e *Service) Serve() error {
 	if e.conf.Https {
 		return e.Engine.RunTLS(e.conf.PortString(), e.conf.HttpsCert, e.conf.HttpKey)
