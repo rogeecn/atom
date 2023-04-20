@@ -2,20 +2,18 @@ package log
 
 import (
 	"strings"
-
-	"go.uber.org/zap/zapcore"
 )
 
 type LevelWriter struct {
-	Level zapcore.Level
+	Level Level
 }
 
 func (w LevelWriter) Write(p []byte) (n int, err error) {
 	str := strings.TrimSpace(string(p))
 	switch w.Level {
-	case zapcore.InfoLevel:
+	case InfoLevel:
 		Info(str)
-	case zapcore.ErrorLevel:
+	case ErrorLevel:
 		Error(str)
 	}
 	return len(p), nil

@@ -1,4 +1,4 @@
-module atom
+module github.com/rogeecn/atom
 
 go 1.19
 

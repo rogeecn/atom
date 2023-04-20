@@ -1,21 +1,21 @@
-/*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
-	_ "atom/database/seeders"
-	_ "atom/providers"
-
-	"atom/container"
-	"atom/contracts"
 	"log"
+
+	"github.com/rogeecn/atom/container"
+	"github.com/rogeecn/atom/contracts"
 
 	"github.com/brianvoe/gofakeit/v6"
 	"github.com/spf13/cobra"
 	"go.uber.org/dig"
 	"gorm.io/gorm"
 )
+
+func WithSeeder(rootCmd *cobra.Command) *cobra.Command {
+	rootCmd.AddCommand(seedCmd)
+	return rootCmd
+}
 
 // seedCmd represents the seed command
 var seedCmd = &cobra.Command{
@@ -38,10 +38,6 @@ var seedCmd = &cobra.Command{
 	PostRun: func(cmd *cobra.Command, args []string) {
 		log.Println("BINGO! seeding done")
 	},
-}
-
-func init() {
-	rootCmd.AddCommand(seedCmd)
 }
 
 type SeedersContainer struct {

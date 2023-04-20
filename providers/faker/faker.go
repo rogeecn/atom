@@ -1,22 +1,19 @@
 package faker
 
 import (
-	"atom/container"
-	"log"
 	"time"
+
+	"github.com/rogeecn/atom/container"
+	"go.uber.org/dig"
 
 	"github.com/brianvoe/gofakeit/v6"
 )
 
-func init() {
-	if err := container.Container.Provide(NewFaker); err != nil {
-		log.Fatal(err)
-	}
-}
+func Provide(opts ...dig.ProvideOption) error {
+	return container.Container.Provide(func() (*gofakeit.Faker, error) {
+		faker := gofakeit.New(time.Now().UnixNano())
+		gofakeit.SetGlobalFaker(faker)
 
-func NewFaker() *gofakeit.Faker {
-	faker := gofakeit.New(time.Now().UnixNano())
-	gofakeit.SetGlobalFaker(faker)
-
-	return faker
+		return faker, nil
+	}, opts...)
 }

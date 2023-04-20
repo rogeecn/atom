@@ -1,12 +1,12 @@
 package jwt
 
 import (
-	"atom/container"
-	"atom/providers/config"
-	"atom/providers/log"
 	"errors"
 	"strings"
 	"time"
+
+	"github.com/rogeecn/atom/container"
+	"go.uber.org/dig"
 
 	jwt "github.com/golang-jwt/jwt/v4"
 	"golang.org/x/sync/singleflight"
@@ -16,12 +16,6 @@ const (
 	CtxKey     = "claims"
 	HttpHeader = "Authorization"
 )
-
-func init() {
-	if err := container.Container.Provide(NewJWT); err != nil {
-		log.Fatal(err)
-	}
-}
 
 type BaseClaims struct {
 	UID  uint64 `json:"uid,omitempty"`
@@ -37,8 +31,8 @@ type Claims struct {
 const TOKEN_PREFIX = "Bearer "
 
 type JWT struct {
-	config       *config.Config
 	singleflight *singleflight.Group
+	config       *Config
 	SigningKey   []byte
 }
 
@@ -49,21 +43,23 @@ var (
 	TokenInvalid     = errors.New("Couldn't handle this token:")
 )
 
-func NewJWT(config *config.Config) (*JWT, error) {
-	return &JWT{
-		config:     config,
-		SigningKey: []byte(config.Http.JWT.SigningKey),
-	}, nil
+func Provide(config *Config, opts ...dig.ProvideOption) error {
+	return container.Container.Provide(func() (*JWT, error) {
+		return &JWT{
+			config:     config,
+			SigningKey: []byte(config.SigningKey),
+		}, nil
+	}, opts...)
 }
 
 func (j *JWT) CreateClaims(baseClaims BaseClaims) *Claims {
-	ep, _ := time.ParseDuration(j.config.Http.JWT.ExpiresTime)
+	ep, _ := time.ParseDuration(j.config.ExpiresTime)
 	claims := Claims{
 		BaseClaims: baseClaims,
 		RegisteredClaims: jwt.RegisteredClaims{
 			NotBefore: jwt.NewNumericDate(time.Now().Add(-time.Second * 10)), // 签名生效时间
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(ep)),                // 过期时间 7天  配置文件
-			Issuer:    j.config.Http.JWT.Issuer,                              // 签名的发行者
+			Issuer:    j.config.Issuer,                                       // 签名的发行者
 		},
 	}
 	return &claims

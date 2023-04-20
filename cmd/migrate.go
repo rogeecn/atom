@@ -4,12 +4,8 @@ import (
 	"log"
 	"sort"
 
-	// init dependencies
-	_ "atom/database/migrations"
-	_ "atom/providers"
-
-	"atom/container"
-	"atom/contracts"
+	"github.com/rogeecn/atom/container"
+	"github.com/rogeecn/atom/contracts"
 
 	"github.com/go-gormigrate/gormigrate/v2"
 	"github.com/spf13/cobra"
@@ -17,19 +13,21 @@ import (
 	"gorm.io/gorm"
 )
 
-// migrateCmd represents the migrate command
-var migrateCmd = &cobra.Command{
-	Use:   "migrate",
-	Short: "migrate database tables",
-	Long:  `migrate database tables`,
-}
-
-func init() {
+func WithMigration(rootCmd *cobra.Command) *cobra.Command {
 	rootCmd.AddCommand(migrateCmd)
 	migrateCmd.AddCommand(migrateUpCmd)
 	migrateCmd.AddCommand(migrateDownCmd)
 
 	migrateCmd.PersistentFlags().StringVar(&migrateToId, "to", "", "migration to id")
+
+	return rootCmd
+}
+
+// migrateCmd represents the migrate command
+var migrateCmd = &cobra.Command{
+	Use:   "migrate",
+	Short: "migrate database tables",
+	Long:  `migrate database tables`,
 }
 
 var migrateToId string
@@ -50,7 +48,6 @@ var migrateUpCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return container.Container.Invoke(func(mi MigrationInfo) error {
 			m := gormigrate.New(mi.DB, gormigrate.DefaultOptions, sortedMigrations(mi.Migrations))
-
 			if len(migrateToId) > 0 {
 				log.Printf("migrate up to [%s]\n", migrateToId)
 				return m.MigrateTo(migrateToId)

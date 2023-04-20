@@ -1,18 +1,13 @@
 package single_flight
 
 import (
-	"atom/container"
-	"log"
-
+	"github.com/rogeecn/atom/container"
+	"go.uber.org/dig"
 	"golang.org/x/sync/singleflight"
 )
 
-func init() {
-	if err := container.Container.Provide(NewSingleFlight); err != nil {
-		log.Fatal(err)
-	}
-}
-
-func NewSingleFlight() (*singleflight.Group, error) {
-	return &singleflight.Group{}, nil
+func Provide(opts ...dig.ProvideOption) error {
+	return container.Container.Provide(func() (*singleflight.Group, error) {
+		return &singleflight.Group{}, nil
+	}, opts...)
 }

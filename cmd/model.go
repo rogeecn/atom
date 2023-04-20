@@ -4,24 +4,29 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"atom/container"
-	"atom/providers/config"
-	"atom/providers/database"
 	"errors"
 	"log"
 
+	"github.com/glebarez/sqlite"
+	"github.com/rogeecn/atom/container"
 	"github.com/spf13/cobra"
 	"go.uber.org/dig"
+	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gen"
 	"gorm.io/gorm"
 )
+
+func WithModel(rootCmd *cobra.Command) *cobra.Command {
+	rootCmd.AddCommand(modelCmd)
+	return rootCmd
+}
 
 // MigrationInfo http service container
 type GenQueryGenerator struct {
 	dig.In
 
-	Config *config.Config
-	DB     *gorm.DB
+	DB *gorm.DB
 }
 
 // // Dynamic SQL
@@ -39,18 +44,18 @@ var modelCmd = &cobra.Command{
 		return container.Container.Invoke(func(gq GenQueryGenerator) error {
 			var tables []string
 
-			switch gq.Config.Database.Driver {
-			case database.DriverMySQL:
+			switch gq.DB.Dialector.Name() {
+			case mysql.Dialector{}.Name():
 				err := gq.DB.Raw("show tables").Scan(&tables).Error
 				if err != nil {
 					log.Fatal(err)
 				}
-			case database.DriverPostgres:
+			case postgres.Dialector{}.Name():
 				err := gq.DB.Raw("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'").Scan(&tables).Error
 				if err != nil {
 					log.Fatal(err)
 				}
-			case database.DriverSQLite:
+			case sqlite.DriverName:
 				err := gq.DB.Raw("SELECT name FROM sqlite_master WHERE type='table'").Scan(&tables).Error
 				if err != nil {
 					log.Fatal(err)
@@ -88,8 +93,4 @@ var modelCmd = &cobra.Command{
 			return nil
 		})
 	},
-}
-
-func init() {
-	rootCmd.AddCommand(modelCmd)
 }

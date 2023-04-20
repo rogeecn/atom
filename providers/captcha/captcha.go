@@ -1,19 +1,15 @@
 package captcha
 
 import (
-	"atom/container"
-	"atom/providers/config"
 	"errors"
 	"log"
+	"time"
 
 	"github.com/mojocn/base64Captcha"
+	"github.com/rogeecn/atom/container"
+	"github.com/spf13/viper"
+	"go.uber.org/dig"
 )
-
-func init() {
-	if err := container.Container.Provide(NewCaptcha); err != nil {
-		log.Fatal(err)
-	}
-}
 
 type CaptchaResponse struct {
 	CaptchaId     string `json:"captcha_id,omitempty"`
@@ -23,16 +19,32 @@ type CaptchaResponse struct {
 }
 
 type Captcha struct {
-	conf    *config.Config
 	captcha *base64Captcha.Captcha
 }
 
-func NewCaptcha(conf *config.Config, driver base64Captcha.Driver) (*Captcha, error) {
-	var store = base64Captcha.DefaultMemStore
-	return &Captcha{
-		conf:    conf,
-		captcha: base64Captcha.NewCaptcha(driver, store),
-	}, nil
+func Provide(conf *Config, opts ...dig.ProvideOption) error {
+	return container.Container.Provide(func() (*Captcha, error) {
+		driver := base64Captcha.NewDriverDigit(
+			int(conf.Width),
+			int(conf.Height),
+			int(conf.Long),
+			conf.MaxScrew,
+			conf.DotCount,
+		)
+
+		store := base64Captcha.DefaultMemStore
+		return &Captcha{
+			captcha: base64Captcha.NewCaptcha(driver, store),
+		}, nil
+	})
+}
+
+func (c *Captcha) OpenCaptchaTimeOutDuration() time.Duration {
+	d, err := time.ParseDuration(viper.GetString("CAPTCHA_IMG_OPEN_TIMEOUT"))
+	if err != nil {
+		log.Panic(err)
+	}
+	return d
 }
 
 func (c *Captcha) Generate() (*CaptchaResponse, error) {
@@ -44,8 +56,8 @@ func (c *Captcha) Generate() (*CaptchaResponse, error) {
 	return &CaptchaResponse{
 		CaptchaId:     id,
 		PicPath:       b64s,
-		CaptchaLength: c.conf.Captcha.KeyLong,
-		OpenCaptcha:   c.conf.Captcha.OpenCaptcha,
+		CaptchaLength: viper.GetUint("CAPTCHA_IMG_KEY_LONG"),
+		OpenCaptcha:   viper.GetUint("CAPTCHA_IMG_OPEN"),
 	}, nil
 }
 
