@@ -1,6 +1,6 @@
 package log
 
-const DefaultKeyPrefix = "Log"
+const DefaultPrefix = "Log"
 
 type Config struct {
 	Level Level
