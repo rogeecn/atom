@@ -26,8 +26,8 @@ func (e *Service) GetEngine() interface{} {
 }
 
 func (e *Service) Serve() error {
-	if e.conf.Https {
-		return e.Engine.RunTLS(e.conf.PortString(), e.conf.HttpsCert, e.conf.HttpKey)
+	if e.conf.Tls != nil {
+		return e.Engine.RunTLS(e.conf.PortString(), e.conf.Tls.Cert, e.conf.Tls.Key)
 	}
 	return e.Engine.Run(e.conf.PortString())
 }

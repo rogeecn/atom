@@ -5,16 +5,21 @@ import (
 )
 
 type Config struct {
-	Static    string
-	Host      string
-	Port      uint
-	Https     bool
-	HttpsCert string
-	HttpKey   string
-	Cors      struct {
-		Mode      string
-		Whitelist []Whitelist
-	}
+	Static *string
+	Host   *string
+	Port   uint
+	Tls    *Tls
+	Cors   *Cors
+}
+
+type Tls struct {
+	Cert string
+	Key  string
+}
+
+type Cors struct {
+	Mode      string
+	Whitelist []Whitelist
 }
 
 type Whitelist struct {
@@ -26,7 +31,10 @@ type Whitelist struct {
 }
 
 func (h *Config) Address() string {
-	return fmt.Sprintf("%s:%d", h.Host, h.Port)
+	if h.Host == nil {
+		return h.PortString()
+	}
+	return fmt.Sprintf("%s:%d", *h.Host, h.Port)
 }
 
 func (h *Config) PortString() string {
