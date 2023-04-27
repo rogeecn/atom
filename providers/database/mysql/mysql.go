@@ -4,15 +4,20 @@ import (
 	"database/sql"
 
 	"github.com/rogeecn/atom/container"
+	"github.com/rogeecn/atom/providers"
 	"github.com/rogeecn/atom/providers/log"
-	"go.uber.org/dig"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 )
 
-func Provide(conf *Config, opts ...dig.ProvideOption) error {
+func Provide(o *providers.Options) error {
+	var conf Config
+	if err := o.UnmarshalConfig(&conf); err != nil {
+		return err
+	}
+
 	return container.Container.Provide(func() (*gorm.DB, error) {
 		if err := createMySQLDatabase(conf.EmptyDsn(), "mysql", conf.CreateDatabaseSql()); err != nil {
 			return nil, err
@@ -53,7 +58,7 @@ func Provide(conf *Config, opts ...dig.ProvideOption) error {
 		sqlDB.SetMaxOpenConns(conf.MaxOpenConns)
 
 		return db, err
-	}, opts...)
+	}, o.DiOptions()...)
 }
 
 // createDatabase 创建数据库

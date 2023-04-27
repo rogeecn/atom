@@ -6,7 +6,8 @@ import (
 	"time"
 
 	"github.com/rogeecn/atom/container"
-	"go.uber.org/dig"
+	"github.com/rogeecn/atom/providers"
+	"github.com/rogeecn/atom/providers/log"
 
 	jwt "github.com/golang-jwt/jwt/v4"
 	"golang.org/x/sync/singleflight"
@@ -43,13 +44,17 @@ var (
 	TokenInvalid     = errors.New("Couldn't handle this token:")
 )
 
-func Provide(config *Config, opts ...dig.ProvideOption) error {
+func Provide(o *providers.Options) error {
+	var config Config
+	if err := o.UnmarshalConfig(&config); err != nil {
+		log.Fatal(err)
+	}
 	return container.Container.Provide(func() (*JWT, error) {
 		return &JWT{
-			config:     config,
+			config:     &config,
 			SigningKey: []byte(config.SigningKey),
 		}, nil
-	}, opts...)
+	}, o.DiOptions()...)
 }
 
 func (j *JWT) CreateClaims(baseClaims BaseClaims) *Claims {

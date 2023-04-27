@@ -4,6 +4,8 @@ import (
 	"fmt"
 )
 
+const DefaultPrefix = "MySQL"
+
 // MySQL database config
 type Config struct {
 	Host         string

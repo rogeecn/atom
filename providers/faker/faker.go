@@ -4,16 +4,16 @@ import (
 	"time"
 
 	"github.com/rogeecn/atom/container"
-	"go.uber.org/dig"
+	"github.com/rogeecn/atom/providers"
 
 	"github.com/brianvoe/gofakeit/v6"
 )
 
-func Provide(opts ...dig.ProvideOption) error {
+func Provide(o *providers.Options) error {
 	return container.Container.Provide(func() (*gofakeit.Faker, error) {
 		faker := gofakeit.New(time.Now().UnixNano())
 		gofakeit.SetGlobalFaker(faker)
 
 		return faker, nil
-	}, opts...)
+	}, o.DiOptions()...)
 }

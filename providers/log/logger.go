@@ -2,20 +2,25 @@ package log
 
 import (
 	"github.com/rogeecn/atom/container"
+	"github.com/rogeecn/atom/providers"
 
-	"go.uber.org/dig"
 	"go.uber.org/zap"
 )
 
-func Provide(config *Config, opts ...dig.ProvideOption) error {
-	logger, err := newZapLogger(config)
+func Provide(o *providers.Options) error {
+	var config Config
+	if err := o.UnmarshalConfig(&config); err != nil {
+		return err
+	}
+
+	logger, err := newZapLogger(&config)
 	if err != nil {
 		return err
 	}
 	defaultLogger = logger
 	return container.Container.Provide(func() (*Logger, error) {
 		return defaultLogger, nil
-	}, opts...)
+	}, o.DiOptions()...)
 }
 
 var defaultLogger *Logger

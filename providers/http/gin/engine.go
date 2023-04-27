@@ -5,9 +5,9 @@ import (
 	"time"
 
 	"github.com/rogeecn/atom/container"
+	"github.com/rogeecn/atom/providers"
 	"github.com/rogeecn/atom/providers/http"
 	"github.com/rogeecn/atom/providers/log"
-	"go.uber.org/dig"
 
 	"github.com/gin-gonic/gin"
 )
@@ -32,7 +32,12 @@ func (e *Service) Serve() error {
 	return e.Engine.Run(e.conf.PortString())
 }
 
-func Provide(cfg *http.Config, opts ...dig.ProvideOption) error {
+func Provide(o *providers.Options) error {
+	var config http.Config
+	if err := o.UnmarshalConfig(&config); err != nil {
+		log.Fatal(err)
+	}
+
 	return container.Container.Provide(func() (http.Service, error) {
 		gin.DefaultWriter = log.LevelWriter{Level: log.InfoLevel}
 		gin.DefaultErrorWriter = log.LevelWriter{Level: log.ErrorLevel}
@@ -53,6 +58,6 @@ func Provide(cfg *http.Config, opts ...dig.ProvideOption) error {
 			)
 		}))
 
-		return &Service{Engine: engine, conf: cfg}, nil
-	}, opts...)
+		return &Service{Engine: engine, conf: &config}, nil
+	}, o.DiOptions()...)
 }

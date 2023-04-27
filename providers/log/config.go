@@ -1,5 +1,7 @@
 package log
 
+const DefaultKeyPrefix = "Log"
+
 type Config struct {
 	Level Level
 }

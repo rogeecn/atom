@@ -7,8 +7,8 @@ import (
 
 	"github.com/mojocn/base64Captcha"
 	"github.com/rogeecn/atom/container"
+	"github.com/rogeecn/atom/providers"
 	"github.com/spf13/viper"
-	"go.uber.org/dig"
 )
 
 type CaptchaResponse struct {
@@ -22,7 +22,12 @@ type Captcha struct {
 	captcha *base64Captcha.Captcha
 }
 
-func Provide(conf *Config, opts ...dig.ProvideOption) error {
+func Provide(o *providers.Options) error {
+	var conf Config
+	if err := o.UnmarshalConfig(&conf); err != nil {
+		log.Fatal(err)
+	}
+
 	return container.Container.Provide(func() (*Captcha, error) {
 		driver := base64Captcha.NewDriverDigit(
 			int(conf.Width),
@@ -36,7 +41,7 @@ func Provide(conf *Config, opts ...dig.ProvideOption) error {
 		return &Captcha{
 			captcha: base64Captcha.NewCaptcha(driver, store),
 		}, nil
-	})
+	}, o.DiOptions()...)
 }
 
 func (c *Captcha) OpenCaptchaTimeOutDuration() time.Duration {

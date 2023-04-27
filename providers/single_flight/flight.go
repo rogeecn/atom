@@ -2,12 +2,12 @@ package single_flight
 
 import (
 	"github.com/rogeecn/atom/container"
-	"go.uber.org/dig"
+	"github.com/rogeecn/atom/providers"
 	"golang.org/x/sync/singleflight"
 )
 
-func Provide(opts ...dig.ProvideOption) error {
+func Provide(o *providers.Options) error {
 	return container.Container.Provide(func() (*singleflight.Group, error) {
 		return &singleflight.Group{}, nil
-	}, opts...)
+	}, o.DiOptions()...)
 }

@@ -2,14 +2,19 @@ package sqlite
 
 import (
 	"github.com/rogeecn/atom/container"
-	"go.uber.org/dig"
+	"github.com/rogeecn/atom/providers"
 
 	// "gorm.io/driver/sqlite"
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
 )
 
-func Provide(conf *Config, opts ...dig.ProvideOption) error {
+func Provide(o *providers.Options) error {
+	var conf Config
+	if err := o.UnmarshalConfig(&conf); err != nil {
+		return err
+	}
+
 	return container.Container.Provide(func() (*gorm.DB, error) {
 		db, err := gorm.Open(sqlite.Open(conf.File), &gorm.Config{})
 		if err != nil {
@@ -17,5 +22,5 @@ func Provide(conf *Config, opts ...dig.ProvideOption) error {
 		}
 
 		return db, err
-	}, opts...)
+	}, o.DiOptions()...)
 }

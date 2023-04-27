@@ -2,7 +2,7 @@ package uuid
 
 import (
 	"github.com/rogeecn/atom/container"
-	"go.uber.org/dig"
+	"github.com/rogeecn/atom/providers"
 
 	"github.com/gofrs/uuid"
 )
@@ -11,12 +11,12 @@ type Generator struct {
 	generator uuid.Generator
 }
 
-func Provide(opts ...dig.ProvideOption) error {
+func Provide(o *providers.Options) error {
 	return container.Container.Provide(func() (*Generator, error) {
 		return &Generator{
 			generator: uuid.DefaultGenerator,
 		}, nil
-	})
+	}, o.DiOptions()...)
 }
 
 func (u *Generator) MustGenerate() string {

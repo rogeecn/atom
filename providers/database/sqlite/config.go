@@ -1,5 +1,7 @@
 package sqlite
 
+const DefaultPrefix = "SQLite"
+
 type Config struct {
 	File string
 }

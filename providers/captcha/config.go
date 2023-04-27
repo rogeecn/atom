@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+const DefaultPrefix = "Captcha"
+
 type Config struct {
 	Long        uint    // 验证码长度
 	Width       uint    // 验证码宽度

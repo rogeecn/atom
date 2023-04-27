@@ -6,6 +6,8 @@ import (
 	"github.com/rogeecn/atom/providers/log"
 )
 
+const DefaultKeyPrefix = "JWT"
+
 type Config struct {
 	SigningKey  string // jwt签名
 	ExpiresTime string // 过期时间

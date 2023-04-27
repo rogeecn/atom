@@ -4,6 +4,8 @@ import (
 	"fmt"
 )
 
+const DefaultPrefix = "Postgres"
+
 type Config struct {
 	Username     string
 	Password     string

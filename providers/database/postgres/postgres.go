@@ -4,14 +4,19 @@ import (
 	"log"
 
 	"github.com/rogeecn/atom/container"
-	"go.uber.org/dig"
+	"github.com/rogeecn/atom/providers"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 )
 
-func Provide(conf *Config, opts ...dig.ProvideOption) error {
+func Provide(o *providers.Options) error {
+	var conf Config
+	if err := o.UnmarshalConfig(&conf); err != nil {
+		return err
+	}
+
 	return container.Container.Provide(func() (*gorm.DB, error) {
 		dbConfig := postgres.Config{
 			DSN: conf.DSN(), // DSN data source name
@@ -36,5 +41,5 @@ func Provide(conf *Config, opts ...dig.ProvideOption) error {
 		sqlDB.SetMaxOpenConns(conf.MaxOpenConns)
 
 		return db, err
-	}, opts...)
+	}, o.DiOptions()...)
 }
