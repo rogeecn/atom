@@ -22,21 +22,23 @@ func LoadConfig(file, envPrefix string) *Config {
 		envPrefix = DefaultPrefix
 	}
 
-	viper.SetEnvPrefix(envPrefix)
-	viper.AutomaticEnv()
+	v := viper.NewWithOptions(viper.KeyDelimiter("_"))
+
+	v.SetEnvPrefix(envPrefix)
+	v.AutomaticEnv()
 
 	if !fs.FileExist(file) {
 		return &Config{}
 	}
 
 	// load file
-	viper.SetConfigFile(file)
-	if err := viper.ReadInConfig(); err != nil {
+	v.SetConfigFile(file)
+	if err := v.ReadInConfig(); err != nil {
 		log.Fatal(err)
 	}
 
 	var config Config
-	if err := viper.Unmarshal(&config); err != nil {
+	if err := v.Unmarshal(&config); err != nil {
 		log.Fatal(err)
 	}
 
