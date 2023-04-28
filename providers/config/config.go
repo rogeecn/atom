@@ -5,14 +5,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-func AutoLoad() *viper.Viper {
-	v, err := Load("config.toml")
-	if err != nil {
-		return nil
-	}
-	return v
-}
-
 func Load(file string) (*viper.Viper, error) {
 	v := viper.NewWithOptions(viper.KeyDelimiter("_"))
 	v.AutomaticEnv()
