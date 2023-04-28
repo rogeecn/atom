@@ -5,9 +5,9 @@ import (
 	"time"
 
 	"github.com/rogeecn/atom/container"
-	"github.com/rogeecn/atom/providers"
 	"github.com/rogeecn/atom/providers/http"
 	"github.com/rogeecn/atom/providers/log"
+	"github.com/rogeecn/atom/utils/opt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -32,7 +32,8 @@ func (e *Service) Serve() error {
 	return e.Engine.Run(e.conf.PortString())
 }
 
-func Provide(o *providers.Options) error {
+func Provide(opts ...opt.Option) error {
+	o := opt.New(opts...)
 	var config http.Config
 	if err := o.UnmarshalConfig(&config); err != nil {
 		log.Fatal(err)

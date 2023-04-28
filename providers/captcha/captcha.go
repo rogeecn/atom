@@ -7,7 +7,7 @@ import (
 
 	"github.com/mojocn/base64Captcha"
 	"github.com/rogeecn/atom/container"
-	"github.com/rogeecn/atom/providers"
+	"github.com/rogeecn/atom/utils/opt"
 	"github.com/spf13/viper"
 )
 
@@ -22,7 +22,8 @@ type Captcha struct {
 	captcha *base64Captcha.Captcha
 }
 
-func Provide(o *providers.Options) error {
+func Provide(opts ...opt.Option) error {
+	o := opt.New(opts...)
 	var conf Config
 	if err := o.UnmarshalConfig(&conf); err != nil {
 		log.Fatal(err)

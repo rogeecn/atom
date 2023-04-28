@@ -1,4 +1,4 @@
-package providers
+package opt
 
 import (
 	"github.com/spf13/viper"
@@ -6,10 +6,10 @@ import (
 )
 
 type Options struct {
-	Config       *viper.Viper
-	ConfigPrefix string
-	Name         string
-	Group        string
+	Config *viper.Viper
+	Prefix string
+	Name   string
+	Group  string
 }
 
 type Option func(o *Options)
@@ -23,7 +23,7 @@ func New(opts ...Option) *Options {
 }
 
 func (o *Options) UnmarshalConfig(config interface{}) error {
-	return o.Config.UnmarshalKey(o.ConfigPrefix, &config)
+	return o.Config.UnmarshalKey(o.Prefix, &config)
 }
 
 func (o *Options) DiOptions() []dig.ProvideOption {
@@ -37,26 +37,26 @@ func (o *Options) DiOptions() []dig.ProvideOption {
 	return options
 }
 
-func WithConfig(config *viper.Viper) Option {
+func Config(config *viper.Viper) Option {
 	return func(o *Options) {
 		o.Config = config
 	}
 }
 
-func WithName(name string) Option {
+func Name(name string) Option {
 	return func(o *Options) {
 		o.Name = name
 	}
 }
 
-func WithGroup(group string) Option {
+func Group(group string) Option {
 	return func(o *Options) {
 		o.Group = group
 	}
 }
 
-func WithConfigPrefix(prefix string) Option {
+func Prefix(prefix string) Option {
 	return func(o *Options) {
-		o.ConfigPrefix = prefix
+		o.Prefix = prefix
 	}
 }

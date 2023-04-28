@@ -2,11 +2,12 @@ package single_flight
 
 import (
 	"github.com/rogeecn/atom/container"
-	"github.com/rogeecn/atom/providers"
+	"github.com/rogeecn/atom/utils/opt"
 	"golang.org/x/sync/singleflight"
 )
 
-func Provide(o *providers.Options) error {
+func Provide(opts ...opt.Option) error {
+	o := opt.New(opts...)
 	return container.Container.Provide(func() (*singleflight.Group, error) {
 		return &singleflight.Group{}, nil
 	}, o.DiOptions()...)

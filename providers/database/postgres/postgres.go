@@ -4,14 +4,15 @@ import (
 	"log"
 
 	"github.com/rogeecn/atom/container"
-	"github.com/rogeecn/atom/providers"
+	"github.com/rogeecn/atom/utils/opt"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 )
 
-func Provide(o *providers.Options) error {
+func Provide(opts ...opt.Option) error {
+	o := opt.New(opts...)
 	var conf Config
 	if err := o.UnmarshalConfig(&conf); err != nil {
 		return err

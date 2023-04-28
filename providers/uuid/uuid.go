@@ -2,7 +2,7 @@ package uuid
 
 import (
 	"github.com/rogeecn/atom/container"
-	"github.com/rogeecn/atom/providers"
+	"github.com/rogeecn/atom/utils/opt"
 
 	"github.com/gofrs/uuid"
 )
@@ -11,7 +11,8 @@ type Generator struct {
 	generator uuid.Generator
 }
 
-func Provide(o *providers.Options) error {
+func Provide(opts ...opt.Option) error {
+	o := opt.New(opts...)
 	return container.Container.Provide(func() (*Generator, error) {
 		return &Generator{
 			generator: uuid.DefaultGenerator,

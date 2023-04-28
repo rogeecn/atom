@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/rogeecn/atom/container"
-	"github.com/rogeecn/atom/providers"
 	"github.com/rogeecn/atom/providers/log"
+	"github.com/rogeecn/atom/utils/opt"
 
 	jwt "github.com/golang-jwt/jwt/v4"
 	"golang.org/x/sync/singleflight"
@@ -44,7 +44,8 @@ var (
 	TokenInvalid     = errors.New("Couldn't handle this token:")
 )
 
-func Provide(o *providers.Options) error {
+func Provide(opts ...opt.Option) error {
+	o := opt.New(opts...)
 	var config Config
 	if err := o.UnmarshalConfig(&config); err != nil {
 		log.Fatal(err)
