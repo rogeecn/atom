@@ -10,7 +10,7 @@ type Http struct {
 	dig.In
 
 	Service http.Service
-	Routes  []http.Route `group:"route"`
+	Routes  []http.Route `group:"routes"`
 }
 
 func ServeHttp() error {

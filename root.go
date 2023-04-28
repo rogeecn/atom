@@ -1,13 +1,21 @@
 package atom
 
 import (
+	"log"
+
 	"github.com/pkg/errors"
 	"github.com/rogeecn/atom/container"
+	"github.com/rogeecn/atom/contracts"
 	"github.com/rogeecn/atom/providers/config"
 	"github.com/spf13/cobra"
+	"go.uber.org/dig"
 )
 
 var cfgFile string
+
+var (
+	GroupRoutes = dig.Group("routes")
+)
 
 func Serve(providers container.Providers, opts ...Option) error {
 	var rootCmd = &cobra.Command{}
@@ -17,9 +25,9 @@ func Serve(providers container.Providers, opts ...Option) error {
 		opt(rootCmd)
 	}
 
-	WithMigration(rootCmd)
-	WithModel(rootCmd)
-	WithSeeder(rootCmd)
+	withMigrationCommand(rootCmd)
+	withModelCommand(rootCmd)
+	withSeederCommand(rootCmd)
 
 	// parse config files
 	configure, err := config.Load(cfgFile)
@@ -92,5 +100,25 @@ func PreRunE(run func(cmd *cobra.Command, args []string) error) Option {
 func Config(file string) Option {
 	return func(cmd *cobra.Command) {
 		_ = cmd.PersistentFlags().Set("config", file)
+	}
+}
+
+func Seeders(seeders ...contracts.SeederProvider) Option {
+	return func(cmd *cobra.Command) {
+		for _, seeder := range seeders {
+			if err := container.Container.Provide(seeder, dig.Group("seeder")); err != nil {
+				log.Fatal(err)
+			}
+		}
+	}
+}
+
+func Migrations(migrations ...contracts.MigrationProvider) Option {
+	return func(cmd *cobra.Command) {
+		for _, migration := range migrations {
+			if err := container.Container.Provide(migration, dig.Group("migrations")); err != nil {
+				log.Fatal(err)
+			}
+		}
 	}
 }

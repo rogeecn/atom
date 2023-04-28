@@ -8,3 +8,5 @@ type Migration interface {
 	Up(tx *gorm.DB) error
 	Down(tx *gorm.DB) error
 }
+
+type MigrationProvider func() Migration

@@ -9,3 +9,5 @@ import (
 type Seeder interface {
 	Run(*gofakeit.Faker, *gorm.DB)
 }
+
+type SeederProvider func() Seeder
