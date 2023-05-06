@@ -25,11 +25,18 @@ func Serve(providers container.Providers, opts ...Option) error {
 	for _, opt := range opts {
 		opt(rootCmd)
 	}
+	if err := LoadProviders(cfgFile, providers); err != nil {
+		return err
+	}
 
 	withMigrationCommand(rootCmd)
 	withModelCommand(rootCmd)
 	withSeederCommand(rootCmd)
 
+	return rootCmd.Execute()
+}
+
+func LoadProviders(cfgFile string, providers container.Providers) error {
 	// parse config files
 	configure, err := config.Load(cfgFile)
 	if err != nil {
@@ -39,8 +46,7 @@ func Serve(providers container.Providers, opts ...Option) error {
 	if err := providers.Provide(configure); err != nil {
 		return err
 	}
-
-	return rootCmd.Execute()
+	return nil
 }
 
 type Option func(*cobra.Command)
