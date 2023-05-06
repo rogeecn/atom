@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-const ConfigPrefix = "Http"
+const DefaultPrefix = "Http"
 
 type Config struct {
 	Static *string

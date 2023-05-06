@@ -14,7 +14,8 @@ import (
 var cfgFile string
 
 var (
-	GroupRoutes = dig.Group("routes")
+	GroupRoutes     = dig.Group("routes")
+	GroupGrpcServer = dig.Group("grpc_server_services")
 )
 
 func Serve(providers container.Providers, opts ...Option) error {
