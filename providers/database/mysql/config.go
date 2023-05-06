@@ -2,9 +2,21 @@ package mysql
 
 import (
 	"fmt"
+
+	"github.com/rogeecn/atom/container"
+	"github.com/rogeecn/atom/utils/opt"
 )
 
 const DefaultPrefix = "MySQL"
+
+func DefaultProvider() container.ProviderContainer {
+	return container.ProviderContainer{
+		Provider: Provide,
+		Options: []opt.Option{
+			opt.Prefix(DefaultPrefix),
+		},
+	}
+}
 
 // MySQL database config
 type Config struct {

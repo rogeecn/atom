@@ -7,6 +7,13 @@ import (
 	"github.com/gofrs/uuid"
 )
 
+func DefaultProvider() container.ProviderContainer {
+	return container.ProviderContainer{
+		Provider: Provide,
+		Options:  []opt.Option{},
+	}
+}
+
 type Generator struct {
 	generator uuid.Generator
 }

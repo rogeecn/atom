@@ -9,6 +9,13 @@ import (
 	"github.com/brianvoe/gofakeit/v6"
 )
 
+func DefaultProvider() container.ProviderContainer {
+	return container.ProviderContainer{
+		Provider: Provide,
+		Options:  []opt.Option{},
+	}
+}
+
 func Provide(opts ...opt.Option) error {
 	o := opt.New(opts...)
 	return container.Container.Provide(func() (*gofakeit.Faker, error) {

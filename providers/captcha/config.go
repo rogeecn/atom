@@ -3,9 +3,21 @@ package captcha
 import (
 	"log"
 	"time"
+
+	"github.com/rogeecn/atom/container"
+	"github.com/rogeecn/atom/utils/opt"
 )
 
 const DefaultPrefix = "Captcha"
+
+func DefaultProvider() container.ProviderContainer {
+	return container.ProviderContainer{
+		Provider: Provide,
+		Options: []opt.Option{
+			opt.Prefix(DefaultPrefix),
+		},
+	}
+}
 
 type Config struct {
 	Long        uint    // 验证码长度

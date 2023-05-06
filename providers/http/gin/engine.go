@@ -12,6 +12,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func DefaultProvider() container.ProviderContainer {
+	return container.ProviderContainer{
+		Provider: Provide,
+		Options: []opt.Option{
+			opt.Prefix(http.DefaultPrefix),
+		},
+	}
+}
+
 type Service struct {
 	conf   *http.Config
 	Engine *gin.Engine
