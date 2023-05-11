@@ -13,7 +13,7 @@ require (
 	github.com/mojocn/base64Captcha v1.3.5
 	github.com/pkg/errors v0.9.1
 	github.com/rogeecn/gen v1.0.11
-	github.com/spf13/cobra v1.5.0
+	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.15.0
 	go.uber.org/dig v1.15.0
 	go.uber.org/zap v1.21.0
@@ -41,7 +41,7 @@ require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
-	github.com/inconshreveable/mousetrap v1.0.0 // indirect
+	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgconn v1.13.0 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect

@@ -1,6 +1,7 @@
 package atom
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/pkg/errors"
@@ -18,15 +19,21 @@ var (
 	GroupGrpcServer = dig.Group("grpc_server_services")
 )
 
-func Serve(providers container.Providers, opts ...Option) error {
-	var rootCmd = &cobra.Command{}
-	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "config.toml", "config file path")
+func init() {
 
+}
+
+func Serve(providers container.Providers, opts ...Option) error {
+	var rootCmd = &cobra.Command{Use: "app"}
 	for _, opt := range opts {
 		opt(rootCmd)
 	}
-	if err := LoadProviders(cfgFile, providers); err != nil {
-		return err
+
+	defaultCfgFile := fmt.Sprintf(".%s.toml", rootCmd.Use)
+	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file path, lookup in dir: $HOME, $PWD, /etc, /usr/local/etc, filename: "+defaultCfgFile)
+
+	rootCmd.PersistentPreRunE = func(cmd *cobra.Command, args []string) error {
+		return LoadProviders(cfgFile, cmd.Use, providers)
 	}
 
 	withMigrationCommand(rootCmd)
@@ -36,9 +43,9 @@ func Serve(providers container.Providers, opts ...Option) error {
 	return rootCmd.Execute()
 }
 
-func LoadProviders(cfgFile string, providers container.Providers) error {
+func LoadProviders(cfgFile, appName string, providers container.Providers) error {
 	// parse config files
-	configure, err := config.Load(cfgFile)
+	configure, err := config.Load(cfgFile, appName)
 	if err != nil {
 		return errors.Wrapf(err, "load config file: %s", cfgFile)
 	}
