@@ -1,6 +1,9 @@
 package config
 
 import (
+	"os"
+	"path/filepath"
+
 	"github.com/rogeecn/atom/container"
 	"github.com/spf13/viper"
 )
@@ -12,8 +15,26 @@ func Load(file, app string) (*viper.Viper, error) {
 	if file == "" {
 		v.SetConfigType("toml")
 		v.SetConfigName(app)
+
+		//execute path
+		execPath, err := os.Executable()
+		if err == nil {
+			v.AddConfigPath(filepath.Dir(execPath))
+		}
+
+		//home path
+		homePath, err := os.UserHomeDir()
+		if err == nil {
+			v.AddConfigPath(homePath)
+			v.AddConfigPath(homePath + "/" + app)
+			v.AddConfigPath(homePath + "/.config")
+			v.AddConfigPath(homePath + "/.config/" + app)
+		}
+
 		v.AddConfigPath("/etc")
+		v.AddConfigPath("/etc/" + app)
 		v.AddConfigPath("/usr/local/etc")
+		v.AddConfigPath("/usr/local/etc/" + app)
 	} else {
 		v.SetConfigFile(file)
 	}

@@ -34,7 +34,7 @@ func Serve(providers container.Providers, opts ...Option) error {
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file path, lookup in dir: $HOME, $PWD, /etc, /usr/local/etc, filename: "+defaultCfgFile)
 
 	rootCmd.PersistentPreRunE = func(cmd *cobra.Command, args []string) error {
-		return LoadProviders(cfgFile, cmd.Use, providers)
+		return LoadProviders(cfgFile, rootCmd.Use, providers)
 	}
 
 	withMigrationCommand(rootCmd)
