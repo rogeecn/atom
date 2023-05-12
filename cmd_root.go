@@ -17,6 +17,7 @@ var cfgFile string
 var (
 	GroupRoutes     = dig.Group("routes")
 	GroupGrpcServer = dig.Group("grpc_server_services")
+	GroupCommand    = dig.Group("command_services")
 )
 
 func init() {
@@ -39,6 +40,7 @@ func Serve(providers container.Providers, opts ...Option) error {
 	withMigrationCommand(rootCmd)
 	withModelCommand(rootCmd)
 	withSeederCommand(rootCmd)
+	withServiceInstall(rootCmd)
 
 	return rootCmd.Execute()
 }
