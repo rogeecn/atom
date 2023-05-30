@@ -18,6 +18,7 @@ func DefaultProvider() container.ProviderContainer {
 }
 
 type Config struct {
+	Alphabet  string
 	Salt      string
 	MinLength uint
 }

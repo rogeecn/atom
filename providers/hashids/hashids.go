@@ -15,9 +15,21 @@ func Provide(opts ...opt.Option) error {
 		log.Fatal(err)
 	}
 	return container.Container.Provide(func() (*hashids.HashID, error) {
-		return hashids.NewWithData(&hashids.HashIDData{
-			MinLength: int(config.MinLength),
-			Salt:      config.Salt,
-		})
+		data := hashids.NewData()
+		data.MinLength = int(config.MinLength)
+		if data.MinLength == 0 {
+			data.MinLength = 5
+		}
+
+		data.Salt = config.Salt
+		if data.Salt == "" {
+			data.Salt = "default-salt-key"
+		}
+
+		if config.Alphabet != "" {
+			data.Alphabet = config.Alphabet
+		}
+
+		return hashids.NewWithData(data)
 	}, o.DiOptions()...)
 }
