@@ -14,6 +14,7 @@ require (
 	github.com/juju/go4 v0.0.0-20160222163258-40d72ab9641a
 	github.com/mojocn/base64Captcha v1.3.5
 	github.com/pkg/errors v0.9.1
+	github.com/redis/go-redis/v9 v9.0.5
 	github.com/rogeecn/gen v1.0.11
 	github.com/speps/go-hashids/v2 v2.0.1
 	github.com/spf13/cobra v1.7.0

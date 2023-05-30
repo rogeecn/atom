@@ -3,7 +3,7 @@ package redis
 import (
 	"fmt"
 
-	"github.com/go-redis/redis/v8"
+	"github.com/redis/go-redis/v9"
 	"github.com/rogeecn/atom/container"
 	"github.com/rogeecn/atom/utils/opt"
 )

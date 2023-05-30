@@ -3,8 +3,8 @@ package redis
 import (
 	"context"
 
-	"github.com/go-redis/redis/v8"
 	"github.com/pkg/errors"
+	"github.com/redis/go-redis/v9"
 	"github.com/rogeecn/atom/container"
 	"github.com/rogeecn/atom/utils/opt"
 )
