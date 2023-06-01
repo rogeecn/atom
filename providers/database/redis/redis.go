@@ -24,6 +24,9 @@ func Provide(opts ...opt.Option) error {
 			return nil, errors.Wrap(err, "failed to ping")
 		}
 
+		container.AddCloseAble(func() {
+			client.Close()
+		})
 		return client, nil
 	}, o.DiOptions()...)
 }

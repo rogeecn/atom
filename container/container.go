@@ -11,6 +11,7 @@ import (
 
 var Container *dig.Container = dig.New()
 var Cancel context.CancelFunc
+var closeable []func()
 
 func init() {
 	if err := Container.Provide(func() context.Context {
@@ -19,6 +20,18 @@ func init() {
 		return ctx
 	}); err != nil {
 		log.Fatal(err)
+	}
+
+	closeable = make([]func(), 0)
+}
+
+func AddCloseAble(c func()) {
+	closeable = append(closeable, c)
+}
+
+func Close() {
+	for _, c := range closeable {
+		c()
 	}
 }
 

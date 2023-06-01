@@ -14,6 +14,8 @@ type GrpcService struct {
 }
 
 func ServeGrpc() error {
+	defer container.Close()
+
 	return container.Container.Invoke(func(grpc GrpcService) error {
 		for _, svc := range grpc.Services {
 			grpc.Server.RegisterService(svc.Name(), svc.Register)

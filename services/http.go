@@ -14,6 +14,8 @@ type Http struct {
 }
 
 func ServeHttp() error {
+	defer container.Close()
+
 	return container.Container.Invoke(func(http Http) error {
 		for _, route := range http.Routes {
 			route.Register()
