@@ -20,7 +20,7 @@ func Provide(opts ...opt.Option) error {
 	}
 	return container.Container.Provide(func(cert *cert.Cert) *Casdoor {
 		certificate := config.Certificate
-		if cert == "" {
+		if certificate == "" {
 			certificate = cert.Cert
 		}
 		casdoorsdk.InitConfig(
