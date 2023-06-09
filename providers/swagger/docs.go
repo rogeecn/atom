@@ -5,15 +5,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/rogeecn/atom/container"
+	"github.com/rogeecn/atom/contracts"
 	"github.com/rogeecn/atom/providers/http"
 	"github.com/rogeecn/atom/utils/opt"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/swag"
 )
-
-type Swagger struct {
-}
 
 func Provide(opts ...opt.Option) error {
 	o := opt.New(opts...)
@@ -22,7 +20,7 @@ func Provide(opts ...opt.Option) error {
 		return err
 	}
 
-	return container.Container.Provide(func(http http.Service) *Swagger {
+	return container.Container.Provide(func(http http.Service) contracts.Initial {
 		if config.BaseRoute == "" {
 			config.BaseRoute = "swagger"
 		}
@@ -50,6 +48,6 @@ func Provide(opts ...opt.Option) error {
 		}
 		engine.GET(fmt.Sprintf("/%s/*any", config.BaseRoute), handler)
 
-		return &Swagger{}
+		return nil
 	}, o.DiOptions()...)
 }

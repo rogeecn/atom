@@ -15,9 +15,15 @@ import (
 var cfgFile string
 
 var (
-	GroupRoutes     = dig.Group("routes")
-	GroupGrpcServer = dig.Group("grpc_server_services")
-	GroupCommand    = dig.Group("command_services")
+	GroupInitialName           = "initials"
+	GroupRoutesName            = "routes"
+	GroupGrpcServerServiceName = "grpc_server_services"
+	GroupCommandName           = "command_services"
+
+	GroupInitial    = dig.Group(GroupInitialName)
+	GroupRoutes     = dig.Group(GroupRoutesName)
+	GroupGrpcServer = dig.Group(GroupGrpcServerServiceName)
+	GroupCommand    = dig.Group(GroupCommandName)
 )
 
 func Serve(providers container.Providers, opts ...Option) error {

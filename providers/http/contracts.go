@@ -1,8 +1,6 @@
 package http
 
-type Route interface {
-	Register()
-}
+type Route interface{}
 
 type Service interface {
 	Serve() error

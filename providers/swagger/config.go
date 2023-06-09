@@ -1,6 +1,7 @@
 package swagger
 
 import (
+	"github.com/rogeecn/atom"
 	"github.com/rogeecn/atom/container"
 	"github.com/rogeecn/atom/utils/opt"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -23,6 +24,7 @@ func DefaultProvider() container.ProviderContainer {
 		Provider: Provide,
 		Options: []opt.Option{
 			opt.Prefix(DefaultPrefix),
+			opt.Group(atom.GroupInitialName),
 		},
 	}
 }
