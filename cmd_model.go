@@ -29,7 +29,7 @@ type GenQueryGenerator struct {
 
 func withModelCommand(rootCmd *cobra.Command) *cobra.Command {
 	// modelCmd represents the gen command
-	var modelCmd = &cobra.Command{
+	modelCmd := &cobra.Command{
 		Use:   "model",
 		Short: "gorm model&query generator",
 		Long:  `gorm model&query generator. more info, see https://gorm.io/gen`,

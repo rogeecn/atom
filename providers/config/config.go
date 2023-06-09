@@ -1,9 +1,11 @@
 package config
 
 import (
+	"log"
 	"os"
 	"path/filepath"
 
+	"github.com/pkg/errors"
 	"github.com/rogeecn/atom/container"
 	"github.com/spf13/viper"
 )
@@ -14,15 +16,15 @@ func Load(file, app string) (*viper.Viper, error) {
 
 	if file == "" {
 		v.SetConfigType("toml")
-		v.SetConfigName(app)
+		v.SetConfigName(app + ".toml")
 
-		//execute path
+		// execute path
 		execPath, err := os.Executable()
 		if err == nil {
 			v.AddConfigPath(filepath.Dir(execPath))
 		}
 
-		//home path
+		// home path
 		homePath, err := os.UserHomeDir()
 		if err == nil {
 			v.AddConfigPath(homePath)
@@ -39,10 +41,13 @@ func Load(file, app string) (*viper.Viper, error) {
 		v.SetConfigFile(file)
 	}
 
-	if err := v.ReadInConfig(); err != nil {
-		return nil, err
+	err := v.ReadInConfig()
+	log.Println("config file:", v.ConfigFileUsed())
+	if err != nil {
+		return nil, errors.Wrap(err, "config file read error")
 	}
-	err := container.Container.Provide(func() (*viper.Viper, error) {
+
+	err = container.Container.Provide(func() (*viper.Viper, error) {
 		return v, nil
 	})
 	if err != nil {

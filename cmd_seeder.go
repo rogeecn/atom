@@ -22,7 +22,7 @@ type SeedersContainer struct {
 
 func withSeederCommand(rootCmd *cobra.Command) *cobra.Command {
 	// seedCmd represents the seed command
-	var seedCmd = &cobra.Command{
+	seedCmd := &cobra.Command{
 		Use:   "seed",
 		Short: "seed databases",
 		Long:  `seed your database with data using seeders.`,

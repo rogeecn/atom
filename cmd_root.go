@@ -20,12 +20,8 @@ var (
 	GroupCommand    = dig.Group("command_services")
 )
 
-func init() {
-
-}
-
 func Serve(providers container.Providers, opts ...Option) error {
-	var rootCmd = &cobra.Command{Use: "app"}
+	rootCmd := &cobra.Command{Use: "app"}
 	for _, opt := range opts {
 		opt(rootCmd)
 	}
@@ -77,6 +73,7 @@ func Long(long string) Option {
 		cmd.Long = long
 	}
 }
+
 func Run(run func(cmd *cobra.Command, args []string)) Option {
 	return func(cmd *cobra.Command) {
 		cmd.Run = run

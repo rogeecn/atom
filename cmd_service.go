@@ -30,7 +30,7 @@ ExecStart={{.ExecStart}}
 
 [Install]
 WantedBy={{.WantedBy}}`
-	var serviceCmd = &cobra.Command{
+	serviceCmd := &cobra.Command{
 		Use:   "service",
 		Short: "install linux service",
 		RunE: func(cmd *cobra.Command, args []string) error {

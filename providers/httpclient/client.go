@@ -12,7 +12,6 @@ import (
 	"github.com/imroc/req/v3"
 	"github.com/rogeecn/atom/container"
 	"github.com/rogeecn/atom/providers/httpclient/cookiejar"
-	"github.com/rogeecn/atom/providers/log"
 	"github.com/rogeecn/atom/utils/opt"
 )
 
@@ -25,7 +24,7 @@ func Provide(opts ...opt.Option) error {
 	o := opt.New(opts...)
 	var config Config
 	if err := o.UnmarshalConfig(&config); err != nil {
-		log.Fatal(err)
+		return err
 	}
 	return container.Container.Provide(func() (*Client, error) {
 		c := &Client{}
@@ -38,7 +37,7 @@ func Provide(opts ...opt.Option) error {
 		if config.CookieJarFile != "" {
 			dir := filepath.Dir(config.CookieJarFile)
 			if _, err := os.Stat(dir); os.IsNotExist(err) {
-				err = os.MkdirAll(dir, 0755)
+				err = os.MkdirAll(dir, 0o755)
 				if err != nil {
 					return nil, err
 				}
@@ -146,6 +145,7 @@ func (c *Client) AllCookies() []*http.Cookie {
 func (c *Client) AllCookiesKV() map[string]string {
 	return c.jar.KVData()
 }
+
 func (c *Client) SetCookie(u *url.URL, cookies []*http.Cookie) {
 	c.jar.SetCookies(u, cookies)
 }

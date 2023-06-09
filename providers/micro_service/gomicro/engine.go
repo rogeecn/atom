@@ -3,7 +3,6 @@ package gomicro
 import (
 	"github.com/rogeecn/atom/container"
 	"github.com/rogeecn/atom/providers/http"
-	"github.com/rogeecn/atom/providers/log"
 	"github.com/rogeecn/atom/providers/micro_service"
 	"github.com/rogeecn/atom/utils/opt"
 	"go-micro.dev/v4"
@@ -23,7 +22,7 @@ func Provide(opts ...opt.Option) error {
 	o := opt.New(opts...)
 	var config micro_service.Config
 	if err := o.UnmarshalConfig(&config); err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	return container.Container.Provide(func() (micro_service.Service, error) {

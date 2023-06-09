@@ -15,7 +15,7 @@ import (
 
 func withMigrationCommand(rootCmd *cobra.Command) *cobra.Command {
 	// migrateUpCmd represents the migrateUp command
-	var migrateUpCmd = &cobra.Command{
+	migrateUpCmd := &cobra.Command{
 		Use:   "up",
 		Short: "migrate up database tables",
 		Long:  `migrate up database tables`,
@@ -35,7 +35,7 @@ func withMigrationCommand(rootCmd *cobra.Command) *cobra.Command {
 	}
 
 	// migrateDownCmd represents the migrateDown command
-	var migrateDownCmd = &cobra.Command{
+	migrateDownCmd := &cobra.Command{
 		Use:   "down",
 		Short: "migrate down database tables",
 		Long:  `migrate down database tables`,
@@ -55,7 +55,7 @@ func withMigrationCommand(rootCmd *cobra.Command) *cobra.Command {
 		},
 	}
 	// migrateCmd represents the migrate command
-	var migrateCmd = &cobra.Command{
+	migrateCmd := &cobra.Command{
 		Use:   "migrate",
 		Short: "migrate database tables",
 		Long:  `migrate database tables`,

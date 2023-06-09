@@ -3,19 +3,23 @@ package container
 import (
 	"context"
 	"log"
+	"os/signal"
+	"syscall"
 
 	"github.com/rogeecn/atom/utils/opt"
 	"github.com/spf13/viper"
 	"go.uber.org/dig"
 )
 
-var Container *dig.Container = dig.New()
-var Cancel context.CancelFunc
-var closeable []func()
+var (
+	Container *dig.Container = dig.New()
+	Cancel    context.CancelFunc
+	closeable []func()
+)
 
 func init() {
 	if err := Container.Provide(func() context.Context {
-		ctx, cancel := context.WithCancel(context.Background())
+		ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 		Cancel = cancel
 		return ctx
 	}); err != nil {

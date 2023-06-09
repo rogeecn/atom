@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/rogeecn/atom/container"
-	"github.com/rogeecn/atom/providers/log"
 	"github.com/rogeecn/atom/utils/opt"
 
 	jwt "github.com/golang-jwt/jwt/v4"
@@ -48,7 +47,7 @@ func Provide(opts ...opt.Option) error {
 	o := opt.New(opts...)
 	var config Config
 	if err := o.UnmarshalConfig(&config); err != nil {
-		log.Fatal(err)
+		return err
 	}
 	return container.Container.Provide(func() (*JWT, error) {
 		return &JWT{

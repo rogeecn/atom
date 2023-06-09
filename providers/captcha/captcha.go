@@ -26,7 +26,7 @@ func Provide(opts ...opt.Option) error {
 	o := opt.New(opts...)
 	var conf Config
 	if err := o.UnmarshalConfig(&conf); err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	return container.Container.Provide(func() (*Captcha, error) {

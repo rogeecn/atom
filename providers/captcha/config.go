@@ -27,7 +27,6 @@ type Config struct {
 	OpenTimeOut string  // 防爆破验证码超时时间，单位：s(秒)
 	MaxScrew    float64 // MaxSkew max absolute skew factor of a single digit.
 	DotCount    int     // Number of background circles.
-
 }
 
 func (c *Config) OpenCaptchaTimeOutDuration() time.Duration {
