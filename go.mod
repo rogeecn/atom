@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/brianvoe/gofakeit/v6 v6.20.1
+	github.com/casdoor/casdoor-go-sdk v0.21.0
 	github.com/gin-gonic/gin v1.8.2
 	github.com/glebarez/sqlite v1.5.0
 	github.com/go-gormigrate/gormigrate/v2 v2.0.2

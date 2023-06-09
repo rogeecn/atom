@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/rogeecn/atom/container"
-	"github.com/rogeecn/atom/providers/http"
 	"github.com/rogeecn/atom/providers/log"
 	"github.com/rogeecn/atom/utils/opt"
 )
@@ -15,7 +14,7 @@ func DefaultProvider() container.ProviderContainer {
 	return container.ProviderContainer{
 		Provider: Provide,
 		Options: []opt.Option{
-			opt.Prefix(http.DefaultPrefix),
+			opt.Prefix(DefaultPrefix),
 		},
 	}
 }
