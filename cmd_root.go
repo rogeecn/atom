@@ -5,9 +5,9 @@ import (
 	"log"
 
 	"github.com/pkg/errors"
+	"github.com/rogeecn/atom-addons/providers/config"
 	"github.com/rogeecn/atom/container"
 	"github.com/rogeecn/atom/contracts"
-	"github.com/rogeecn/atom/providers/config"
 	"github.com/spf13/cobra"
 	"go.uber.org/dig"
 )
