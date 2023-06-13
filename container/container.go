@@ -46,8 +46,11 @@ type ProviderContainer struct {
 
 type Providers []ProviderContainer
 
-func (p Providers) With(pcs Providers) Providers {
-	return append(p, pcs...)
+func (p Providers) With(pcs ...Providers) Providers {
+	for _, pc := range pcs {
+		p = append(p, pc...)
+	}
+	return p
 }
 
 func (p Providers) Provide(config *viper.Viper) error {
