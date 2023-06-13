@@ -125,7 +125,7 @@ func Config(file string) Option {
 func Seeders(seeders ...contracts.SeederProvider) Option {
 	return func(cmd *cobra.Command) {
 		for _, seeder := range seeders {
-			if err := container.Container.Provide(seeder, dig.Group("seeder")); err != nil {
+			if err := container.Container.Provide(seeder, dig.Group("seeders")); err != nil {
 				log.Fatal(err)
 			}
 		}
