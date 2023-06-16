@@ -1,4 +1,6 @@
 # ATOM
+[快速开始](#快速开始)
+[工具使用](#工具使用)
 
 ## 框架介绍
 ### 技术栈
@@ -18,17 +20,17 @@
 
 #### 工具使用
 - gen 生成类功能
-    - [crud](#gen:curd) 生成crud模板
-    - [routes](#gen:routes) 生成业务路由
+    - [crud](#gencurd) 生成crud模板
+    - [routes](#genroutes) 生成业务路由
 - new 创建类功能
-    - [controller](#new:controller) 创建controller
-    - [service](#new:service) 创建 service
-    - [dao](#new:dao) 创建 dao 文件 
-    - [migration](#new:migration) 创建 migration
-    - [seeder](#new:seeder) 创建填充数据 seeder 
-    - [http](#new:http) 创建 http 项目
-    - [module](#new:module) 创建 http module
-    - [suite](#new:suite) 创建测试用例文件
+    - [controller](#newcontroller) 创建controller
+    - [service](#newservice) 创建 service
+    - [dao](#newdao) 创建 dao 文件 
+    - [migration](#newmigration) 创建 migration
+    - [seeder](#newseeder) 创建填充数据 seeder 
+    - [http](#newhttp) 创建 http 项目
+    - [module](#newmodule) 创建 http module
+    - [suite](#newsuite) 创建测试用例文件
 
 ##### gen:curd
     atomctl gen crud [表名] [module]
@@ -92,17 +94,16 @@ module/
 下面将会创建一个用户管理应用示例程序
 
 1. 创建项目 atom-project
-    ```
-    atomctl new http atom/http atom-project
-    cd atom-project
-    go mod tidy
-    ```
-2. 添加  user module
-    ```
-    atomctl new module users
 
-    # 生成目录 modules/users
-    ```
+        atomctl new http atom/http atom-project
+        cd atom-project
+        go mod tidy
+   
+2. 添加 user module
+        
+        atomctl new module users
+
+    生成目录 modules/users
 3. 配置项目启动需要的 providers
     打开入口文件  `main.go`。下面我们需要4个基本的provider
     - sqlite 数据库
@@ -170,7 +171,10 @@ module/
     }
 
     ```
-5. 执行 `go mod tidy`
+5. 执行 
+    
+        go mod tidy
+
 6. 添加 migration 
     ```
     atomctl new migration create_user
@@ -197,7 +201,7 @@ module/
     ```
     2023/06/15 17:50:54 load config file: : config file read error: Config File "http.toml" Not Found in "[/Users/rogee /Users/rogee/http /Users/rogee/.config /Users/rogee/.config/http /etc /etc/http /usr/local/etc /usr/local/etc/http]"
     ```
-    把项目目录中的配置文件转移到项目目录中去
+    把项目目录中的配置文件转移到配置文件查找目录中去
     ```
     ln -s  $PWD/config.toml ~/.config/http.toml  
     ```
@@ -206,21 +210,17 @@ module/
     2023/06/15 17:53:12 config file: /Users/rogee/.config/http.toml
     2023/06/15 17:53:12 BINGO! migrate up done
     ```
-    此时会在项目根目录下看到 `sqlite.db` 文件, 打开文件可见包信2个表，migrations 和 users, migrations 是已执行migration的id有序记录
-    ```
-    sqlite3 sqlite.db
-    SQLite version 3.39.4 2022-09-07 20:51:41
-    Enter ".help" for usage hints.
-    sqlite> .tables
-    migrations  users     
-    ```
+    此时会在项目根目录下看到 `sqlite.db` 文件
 9. 生成model
-    go run . model
+        
+        go run . model
 
     model 会在新表添加后再次执行生成，所以不要编辑任何 `database/models`下的文件内容 
 
 9. 添加假数据
-    atomctl new seeder User 
+        
+        atomctl new seeder User 
+    
     > 注意User是单数，表示 model.User 区别于数据库表名
 
     编辑文件 `database/seeders/users.go`
@@ -242,7 +242,9 @@ module/
     ```
     运行 `go run . seed `, 些时 users 表会被写入10条随机数据
 10. 添加 crud
-    atomctl gen crud users users
+    
+        atomctl gen crud users users
+    
     两个users第一个为crud的名称,第二个为模块名称，执行输出如下
     ```
     2023/06/15 18:06:42 generate:  modules/users/service/users.go
@@ -253,7 +255,9 @@ module/
     2023/06/15 18:06:42 REMEMBER TO ADD NEW PROVIDERS
     ```
 11. 生成 api
-    atomctl gen routes
+
+        atomctl gen routes
+    
     输出如下
     ```
     2023/06/15 18:07:43 route path:  /Users/rogee/tmp/atom-project
@@ -261,39 +265,10 @@ module/
     2023/06/15 18:07:43 generate routes for dir
     2023/06/15 18:07:43 generate route: /Users/rogee/tmp/atom-project/modules/users/routes/route_user_controller.go @ routeUserController(group, userController)
     ```
-    把文件后的提示方法写到 `modules/users/routes/routes.go`, 些时新建的 route provider 还没有注入 userController ，我们手动添加进去，编辑后的文件内容如下:
-    ```
-    func newRoute(svc http.Service, userController *controller.UserController) http.Route {
-        engine := svc.GetEngine().(*gin.Engine)
-        group := engine.Group("users")
-        log.Info("register route group: %s", group)
-
-        routeUserController(group, userController)
-
-        return nil
-    }
-
-    ```
-13. 注册服务 
-    ```
-    modules/users/
-            controller/ provider.go
-            dao/provider.go
-            service/provider.go
-        provider.go
-    ```
-    注册crud provider对象
-    内容类似
-    ```
-    func Provide(opts ...opt.Option) error {
-        _ = container.Container.Provide(NewUserController)
-        return nil
-    }   
-    ```
 12. 运行项目
     ```
     go generate ./...
     go run .
     ```
 13. 访问
-    1. [localhost:9800/doc/index.html](localhost:9800/doc/index.html)
+    [localhost:9800/doc/index.html](localhost:9800/doc/index.html)
