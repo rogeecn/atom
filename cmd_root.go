@@ -41,11 +41,6 @@ func Serve(providers container.Providers, opts ...Option) error {
 		return LoadProviders(cfgFile, rootCmd.Use, providers)
 	}
 
-	withMigrationCommand(rootCmd)
-	withModelCommand(rootCmd)
-	withSeederCommand(rootCmd)
-	withServiceInstall(rootCmd)
-
 	return rootCmd.Execute()
 }
 
@@ -124,8 +119,10 @@ func Config(file string) Option {
 	}
 }
 
-func Seeders(seeders ...contracts.SeederProvider) Option {
+func CmdSeeders(seeders ...contracts.SeederProvider) Option {
 	return func(cmd *cobra.Command) {
+		withSeederCommand(cmd)
+
 		for _, seeder := range seeders {
 			if err := container.Container.Provide(seeder, dig.Group("seeders")); err != nil {
 				log.Fatal(err)
@@ -134,12 +131,32 @@ func Seeders(seeders ...contracts.SeederProvider) Option {
 	}
 }
 
-func Migrations(migrations ...contracts.MigrationProvider) Option {
+func CmdMigrations(migrations ...contracts.MigrationProvider) Option {
 	return func(cmd *cobra.Command) {
+		withMigrationCommand(cmd)
+
 		for _, migration := range migrations {
 			if err := container.Container.Provide(migration, dig.Group("migrations")); err != nil {
 				log.Fatal(err)
 			}
 		}
+	}
+}
+
+func CmdModel() Option {
+	return func(cmd *cobra.Command) {
+		withModelCommand(cmd)
+	}
+}
+
+func CmdService() Option {
+	return func(cmd *cobra.Command) {
+		withServiceInstall(cmd)
+	}
+}
+
+func CmdQueue() Option {
+	return func(cmd *cobra.Command) {
+		withQueueCommand(cmd)
 	}
 }
