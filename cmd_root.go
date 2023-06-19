@@ -19,11 +19,13 @@ var (
 	GroupRoutesName            = "routes"
 	GroupGrpcServerServiceName = "grpc_server_services"
 	GroupCommandName           = "command_services"
+	GroupQueueName             = "queue_handler"
 
 	GroupInitial    = dig.Group(GroupInitialName)
 	GroupRoutes     = dig.Group(GroupRoutesName)
 	GroupGrpcServer = dig.Group(GroupGrpcServerServiceName)
 	GroupCommand    = dig.Group(GroupCommandName)
+	GroupQueue      = dig.Group(GroupQueueName)
 )
 
 func Serve(providers container.Providers, opts ...Option) error {
