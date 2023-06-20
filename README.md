@@ -9,7 +9,7 @@
 - ORM [gorm](https://github.com/go-gorm/gorm)
 - 文档 [swagger](https://github.com/swaggo/swag)
 - 数据生成 [gofakeit](github.com/brianvoe/gofakeit)
-- 框架增强 [gen](github.com/rogeecn/gen)
+- http框架增强 [fen](github.com/rogeecn/fen)
 - 依赖注入 [dig](go.uber.org/dig)
 
 ### 命令行工具 atomctl
@@ -271,4 +271,4 @@ module/
     go run .
     ```
 13. 访问
-    [localhost:9800/doc/index.html](localhost:9800/doc/index.html)
+    [localhost:9800/doc/index.html](http://localhost:9800/doc/index.html)
