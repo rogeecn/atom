@@ -34,6 +34,14 @@ func Serve(providers container.Providers, opts ...Option) error {
 		opt(rootCmd)
 	}
 
+	rootCmd.SilenceErrors = true
+	rootCmd.SilenceUsage = true
+	rootCmd.SetFlagErrorFunc(func(cmd *cobra.Command, err error) error {
+		cmd.Println(err)
+		cmd.Println(cmd.UsageString())
+		return err
+	})
+
 	defaultCfgFile := fmt.Sprintf(".%s.toml", rootCmd.Use)
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file path, lookup in dir: $HOME, $PWD, /etc, /usr/local/etc, filename: "+defaultCfgFile)
 
