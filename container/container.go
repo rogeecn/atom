@@ -18,15 +18,18 @@ var (
 )
 
 func init() {
+	closeable = make([]func(), 0)
 	if err := Container.Provide(func() context.Context {
 		ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+		go func() {
+			<-ctx.Done()
+			Close()
+		}()
 		Cancel = cancel
 		return ctx
 	}); err != nil {
 		log.Fatal(err)
 	}
-
-	closeable = make([]func(), 0)
 }
 
 func AddCloseAble(c func()) {
