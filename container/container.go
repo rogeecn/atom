@@ -24,6 +24,7 @@ func init() {
 		go func() {
 			<-ctx.Done()
 			Close()
+			cancel()
 		}()
 		Cancel = cancel
 		return ctx
