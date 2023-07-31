@@ -1,6 +1,6 @@
 package contracts
 
-type Route interface{}
+type HttpRoute interface{}
 
 type HttpService interface {
 	Serve() error
