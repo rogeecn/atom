@@ -2,12 +2,10 @@ package atom
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/pkg/errors"
 	"github.com/rogeecn/atom-addons/providers/config"
 	"github.com/rogeecn/atom/container"
-	"github.com/rogeecn/atom/contracts"
 	"github.com/spf13/cobra"
 	"go.uber.org/dig"
 )
@@ -127,44 +125,8 @@ func Config(file string) Option {
 	}
 }
 
-func CmdSeeders(seeders ...contracts.SeederProvider) Option {
-	return func(cmd *cobra.Command) {
-		withSeederCommand(cmd)
-
-		for _, seeder := range seeders {
-			if err := container.Container.Provide(seeder, dig.Group("seeders")); err != nil {
-				log.Fatal(err)
-			}
-		}
-	}
-}
-
-func CmdMigrations(migrations ...contracts.MigrationProvider) Option {
-	return func(cmd *cobra.Command) {
-		withMigrationCommand(cmd)
-
-		for _, migration := range migrations {
-			if err := container.Container.Provide(migration, dig.Group("migrations")); err != nil {
-				log.Fatal(err)
-			}
-		}
-	}
-}
-
-func CmdModel() Option {
-	return func(cmd *cobra.Command) {
-		withModelCommand(cmd)
-	}
-}
-
 func CmdService() Option {
 	return func(cmd *cobra.Command) {
 		withServiceInstall(cmd)
-	}
-}
-
-func CmdQueue() Option {
-	return func(cmd *cobra.Command) {
-		withQueueCommand(cmd)
 	}
 }
