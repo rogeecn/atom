@@ -3,8 +3,8 @@ package atom
 import (
 	"fmt"
 
+	"github.com/atom-providers/config"
 	"github.com/pkg/errors"
-	"github.com/rogeecn/atom-addons/providers/config"
 	"github.com/rogeecn/atom/container"
 	"github.com/spf13/cobra"
 	"go.uber.org/dig"

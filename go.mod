@@ -3,9 +3,9 @@ module github.com/rogeecn/atom
 go 1.19
 
 require (
+	github.com/atom-providers/config v0.0.0-20230801062037-db91396e3287
 	github.com/brianvoe/gofakeit/v6 v6.23.0
 	github.com/pkg/errors v0.9.1
-	github.com/rogeecn/atom-addons/providers/config v0.0.0-20230717084320-362ebc474705
 	github.com/rogeecn/gen v1.0.15
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.16.0
