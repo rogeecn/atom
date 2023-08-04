@@ -3,6 +3,7 @@ package container
 import (
 	"context"
 	"log"
+	"os"
 	"os/signal"
 	"syscall"
 
@@ -20,7 +21,8 @@ var (
 func init() {
 	closeable = make([]func(), 0)
 	if err := Container.Provide(func() context.Context {
-		ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+		signals := []os.Signal{syscall.SIGTERM, syscall.SIGINT, syscall.SIGQUIT, syscall.SIGKILL}
+		ctx, cancel := signal.NotifyContext(context.Background(), signals...)
 		go func() {
 			<-ctx.Done()
 			Close()
