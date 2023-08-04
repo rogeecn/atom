@@ -65,9 +65,12 @@ func LoadProviders(cfgFile, appName string, providers container.Providers) error
 
 type Option func(*cobra.Command)
 
+var AppName string
+
 func Name(name string) Option {
 	return func(cmd *cobra.Command) {
 		cmd.Use = name
+		AppName = name
 	}
 }
 
