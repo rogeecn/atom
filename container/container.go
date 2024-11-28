@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/rogeecn/atom/utils/opt"
+	"git.ipao.vip/rogeecn/atom/utils/opt"
 	"github.com/spf13/viper"
 	"go.uber.org/dig"
 )

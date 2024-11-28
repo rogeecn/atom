@@ -3,9 +3,9 @@ package atom
 import (
 	"fmt"
 
-	"github.com/atom-providers/config"
+	"git.ipao.vip/rogeecn/atom/config"
+	"git.ipao.vip/rogeecn/atom/container"
 	"github.com/pkg/errors"
-	"github.com/rogeecn/atom/container"
 	"github.com/spf13/cobra"
 	"go.uber.org/dig"
 )

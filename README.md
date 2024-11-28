@@ -14,7 +14,7 @@
 
 ### 命令行工具 atomctl
 
-#### 安装 
+#### 安装
 
     go install github.com/rogeecn/atomctl@latest
 
@@ -25,9 +25,9 @@
 - new 创建类功能
     - [controller](#newcontroller) 创建controller
     - [service](#newservice) 创建 service
-    - [dao](#newdao) 创建 dao 文件 
+    - [dao](#newdao) 创建 dao 文件
     - [migration](#newmigration) 创建 migration
-    - [seeder](#newseeder) 创建填充数据 seeder 
+    - [seeder](#newseeder) 创建填充数据 seeder
     - [http](#newhttp) 创建 http 项目
     - [module](#newmodule) 创建 http module
     - [suite](#newsuite) 创建测试用例文件
@@ -52,7 +52,7 @@ module/
 #### gen:routes
 1. 为整个项目生成 routes
     ```
-    atomctl gen routes 
+    atomctl gen routes
     ```
 2. 为指定controller 生成 routes
     ```
@@ -98,21 +98,21 @@ module/
         atomctl new http atom/http atom-project
         cd atom-project
         go mod tidy
-   
+
 2. 添加 user module
-        
+
         atomctl new module users
 
     生成目录 modules/users
 3. 配置项目启动需要的 providers
     打开入口文件  `main.go`。下面我们需要4个基本的provider
     - sqlite 数据库
-    - swagger api文档 
+    - swagger api文档
     - faker seeder数据生成
     - query dao需要
     - users 新建立的module
     - boot 应用数据初始化相关
-    
+
     编辑后的 main 文件相关内容如下
     ```go
     import (
@@ -152,9 +152,9 @@ module/
 
         "github.com/rogeecn/atom"
         "github.com/rogeecn/atom-addons/providers/swagger"
-        "github.com/rogeecn/atom/container"
-        "github.com/rogeecn/atom/contracts"
-        "github.com/rogeecn/atom/utils/opt"
+        "git.ipao.vip/rogeecn/atom/container"
+        "git.ipao.vip/rogeecn/atom/contracts"
+        "git.ipao.vip/rogeecn/atom/utils/opt"
     )
 
     func Providers() container.Providers {
@@ -171,11 +171,11 @@ module/
     }
 
     ```
-5. 执行 
-    
+5. 执行
+
         go mod tidy
 
-6. 添加 migration 
+6. 添加 migration
     ```
     atomctl new migration create_user
     ```
@@ -203,24 +203,24 @@ module/
     ```
     把项目目录中的配置文件转移到配置文件查找目录中去
     ```
-    ln -s  $PWD/config.toml ~/.config/http.toml  
+    ln -s  $PWD/config.toml ~/.config/http.toml
     ```
-    再次执行如下输出 
+    再次执行如下输出
     ```
     2023/06/15 17:53:12 config file: /Users/rogee/.config/http.toml
     2023/06/15 17:53:12 BINGO! migrate up done
     ```
     此时会在项目根目录下看到 `sqlite.db` 文件
 9. 生成model
-        
+
         go run . model
 
-    model 会在新表添加后再次执行生成，所以不要编辑任何 `database/models`下的文件内容 
+    model 会在新表添加后再次执行生成，所以不要编辑任何 `database/models`下的文件内容
 
 9. 添加假数据
-        
-        atomctl new seeder User 
-    
+
+        atomctl new seeder User
+
     > 注意User是单数，表示 model.User 区别于数据库表名
 
     编辑文件 `database/seeders/users.go`
@@ -242,9 +242,9 @@ module/
     ```
     运行 `go run . seed `, 些时 users 表会被写入10条随机数据
 10. 添加 crud
-    
+
         atomctl gen crud users users
-    
+
     两个users第一个为crud的名称,第二个为模块名称，执行输出如下
     ```
     2023/06/15 18:06:42 generate:  modules/users/service/users.go
@@ -257,7 +257,7 @@ module/
 11. 生成 api
 
         atomctl gen routes
-    
+
     输出如下
     ```
     2023/06/15 18:07:43 route path:  /Users/rogee/tmp/atom-project
