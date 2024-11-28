@@ -6,5 +6,6 @@ import (
 )
 
 func TruncateTable(db *sql.DB, table string) {
-	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s RESTART IDENTITY", table))
+	_, err := db.Exec(fmt.Sprintf("TRUNCATE TABLE %s RESTART IDENTITY", table))
+	_ = err
 }
