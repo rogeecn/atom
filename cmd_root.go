@@ -78,6 +78,10 @@ func Command(opt ...Option) Option {
 	}
 }
 
+func Arguments(f func(cmd *cobra.Command)) Option {
+	return f
+}
+
 func Version(ver string) Option {
 	return func(cmd *cobra.Command) {
 		cmd.Version = ver

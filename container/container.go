@@ -52,7 +52,14 @@ type ProviderContainer struct {
 
 type Providers []ProviderContainer
 
-func (p Providers) With(pcs ...Providers) Providers {
+func (p Providers) With(pcs ...func(...opt.Option) error) Providers {
+	for _, pc := range pcs {
+		p = append(p, ProviderContainer{Provider: pc})
+	}
+	return p
+}
+
+func (p Providers) WithProviders(pcs ...Providers) Providers {
 	for _, pc := range pcs {
 		p = append(p, pc...)
 	}

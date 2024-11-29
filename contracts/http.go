@@ -1,8 +1,5 @@
 package contracts
 
-type HttpRoute interface{}
-
-type HttpService interface {
-	Serve() error
-	GetEngine() interface{}
+type HttpRoute interface {
+	Register() error
 }
