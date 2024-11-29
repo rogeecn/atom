@@ -1,16 +1,12 @@
 package atom
 
 import (
-	"fmt"
-
 	"git.ipao.vip/rogeecn/atom/config"
 	"git.ipao.vip/rogeecn/atom/container"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"go.uber.org/dig"
 )
-
-var cfgFile string
 
 var (
 	GroupInitialName           = "initials"
@@ -26,7 +22,7 @@ var (
 	GroupQueue      = dig.Group(GroupQueueName)
 )
 
-func Serve(providers container.Providers, opts ...Option) error {
+func Serve(opts ...Option) error {
 	rootCmd := &cobra.Command{Use: "app"}
 	for _, opt := range opts {
 		opt(rootCmd)
@@ -40,21 +36,15 @@ func Serve(providers container.Providers, opts ...Option) error {
 		return err
 	})
 
-	defaultCfgFile := fmt.Sprintf(".%s.toml", rootCmd.Use)
-	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file path, lookup in dir: $HOME, $PWD, /etc, /usr/local/etc, filename: "+defaultCfgFile)
-
-	rootCmd.PersistentPreRunE = func(cmd *cobra.Command, args []string) error {
-		return LoadProviders(cfgFile, rootCmd.Use, providers)
-	}
+	rootCmd.PersistentFlags().StringP("config", "c", "config.toml", "config file")
 
 	return rootCmd.Execute()
 }
 
-func LoadProviders(cfgFile, appName string, providers container.Providers) error {
-	// parse config files
-	configure, err := config.Load(cfgFile, appName)
+func LoadProviders(configFile string, providers container.Providers) error {
+	configure, err := config.Load(configFile)
 	if err != nil {
-		return errors.Wrapf(err, "load config file: %s", cfgFile)
+		return errors.Wrapf(err, "load config file: %s", configFile)
 	}
 
 	if err := providers.Provide(configure); err != nil {
@@ -69,6 +59,24 @@ var (
 	AppName    string
 	AppVersion string
 )
+
+func Providers(providers container.Providers) Option {
+	return func(cmd *cobra.Command) {
+		cmd.PreRunE = func(cmd *cobra.Command, args []string) error {
+			return LoadProviders(cmd.Flag("config").Value.String(), providers)
+		}
+	}
+}
+
+func Command(opt ...Option) Option {
+	return func(parentCmd *cobra.Command) {
+		cmd := &cobra.Command{}
+		for _, o := range opt {
+			o(cmd)
+		}
+		parentCmd.AddCommand(cmd)
+	}
+}
 
 func Version(ver string) Option {
 	return func(cmd *cobra.Command) {
