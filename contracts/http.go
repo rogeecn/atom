@@ -1,5 +1,6 @@
 package contracts
 
 type HttpRoute interface {
-	Register() error
+	Register() any
+	Name() string
 }
