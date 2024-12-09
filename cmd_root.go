@@ -108,6 +108,12 @@ func Long(long string) Option {
 	}
 }
 
+func Example(example string) Option {
+	return func(cmd *cobra.Command) {
+		cmd.Example = example
+	}
+}
+
 func Run(run func(cmd *cobra.Command, args []string)) Option {
 	return func(cmd *cobra.Command) {
 		cmd.Run = run
