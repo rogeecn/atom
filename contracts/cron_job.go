@@ -9,7 +9,7 @@ import (
 type CronJob interface {
 	Description() string
 	Periodic() time.Duration
-	JobArgs() river.JobArgs
+	JobArgs() []river.JobArgs
 	InsertOpts() *river.InsertOpts
 	RunOnStart() bool
 }
