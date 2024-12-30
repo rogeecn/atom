@@ -14,12 +14,14 @@ var (
 	GroupGrpcServerServiceName = "grpc_server_services"
 	GroupCommandName           = "command_services"
 	GroupQueueName             = "queue_handler"
+	GroupCronJobName           = "cron_jobs"
 
 	GroupInitial    = dig.Group(GroupInitialName)
 	GroupRoutes     = dig.Group(GroupRoutesName)
 	GroupGrpcServer = dig.Group(GroupGrpcServerServiceName)
 	GroupCommand    = dig.Group(GroupCommandName)
 	GroupQueue      = dig.Group(GroupQueueName)
+	GroupCronJob    = dig.Group(GroupCronJobName)
 )
 
 func Serve(opts ...Option) error {
