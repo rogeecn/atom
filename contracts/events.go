@@ -7,3 +7,8 @@ type EventHandler interface {
 	PublishToTopic() string
 	Handler(msg *message.Message) ([]*message.Message, error)
 }
+
+type EventPublisher interface {
+	Topic() string
+	Marshal() ([]byte, error)
+}
