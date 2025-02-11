@@ -4,9 +4,9 @@ import (
 	"log"
 	"path/filepath"
 
-	"git.ipao.vip/rogeecn/atom/container"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
+	"go.ipao.vip/atom/container"
 )
 
 func Load(file string) (*viper.Viper, error) {

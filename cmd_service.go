@@ -7,7 +7,7 @@ import (
 	"os"
 	"os/exec"
 
-	"git.ipao.vip/rogeecn/atom/container"
+	"go.ipao.vip/atom/container"
 
 	"github.com/spf13/cobra"
 )

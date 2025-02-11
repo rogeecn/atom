@@ -152,9 +152,9 @@ module/
 
         "github.com/rogeecn/atom"
         "github.com/rogeecn/atom-addons/providers/swagger"
-        "git.ipao.vip/rogeecn/atom/container"
-        "git.ipao.vip/rogeecn/atom/contracts"
-        "git.ipao.vip/rogeecn/atom/utils/opt"
+        "go.ipao.vip/atom/container"
+        "go.ipao.vip/atom/contracts"
+        "go.ipao.vip/atom/utils/opt"
     )
 
     func Providers() container.Providers {

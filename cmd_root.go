@@ -1,10 +1,10 @@
 package atom
 
 import (
-	"git.ipao.vip/rogeecn/atom/config"
-	"git.ipao.vip/rogeecn/atom/container"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
+	"go.ipao.vip/atom/config"
+	"go.ipao.vip/atom/container"
 	"go.uber.org/dig"
 )
 
