@@ -1,15 +1,13 @@
 package contracts
 
 import (
-	"time"
-
 	"github.com/riverqueue/river"
 )
 
 type CronJob interface {
-	Description() string
-	Periodic() time.Duration
-	JobArgs() []river.JobArgs
-	InsertOpts() *river.InsertOpts
+	Kind() string
+	Periodic() river.PeriodicSchedule
+	JobArgs() river.JobArgs
+	InsertOpts() river.InsertOpts
 	RunOnStart() bool
 }
