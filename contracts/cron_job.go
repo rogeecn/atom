@@ -5,9 +5,18 @@ import (
 )
 
 type CronJob interface {
-	Kind() string
-	Periodic() river.PeriodicSchedule
-	JobArgs() river.JobArgs
-	InsertOpts() river.InsertOpts
-	RunOnStart() bool
+	Args() []CronJobArg
+}
+
+type CronJobArgInterface interface {
+	river.JobArgs
+	river.JobArgsWithInsertOpts
+}
+
+type CronJobArg struct {
+	Kind             string
+	RunOnStart       bool
+	PeriodicInterval river.PeriodicSchedule
+
+	Arg CronJobArgInterface
 }
