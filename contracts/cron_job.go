@@ -8,7 +8,7 @@ type CronJob interface {
 	Args() []CronJobArg
 }
 
-type CronJobArgInterface interface {
+type JobArgs interface {
 	river.JobArgs
 	river.JobArgsWithInsertOpts
 }
@@ -17,5 +17,5 @@ type CronJobArg struct {
 	RunOnStart       bool
 	PeriodicInterval river.PeriodicSchedule
 
-	Arg CronJobArgInterface
+	Arg JobArgs
 }
