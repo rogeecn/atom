@@ -14,7 +14,6 @@ type CronJobArgInterface interface {
 }
 
 type CronJobArg struct {
-	Kind             string
 	RunOnStart       bool
 	PeriodicInterval river.PeriodicSchedule
 
