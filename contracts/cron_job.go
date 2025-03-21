@@ -11,6 +11,8 @@ type CronJob interface {
 type JobArgs interface {
 	river.JobArgs
 	river.JobArgsWithInsertOpts
+
+	UniqueID() string
 }
 
 type CronJobArg struct {
