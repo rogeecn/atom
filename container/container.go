@@ -75,3 +75,18 @@ func (p Providers) Provide(config *viper.Viper) error {
 	}
 	return nil
 }
+
+// laters for run later funcs
+var later []func() error
+
+func Later(f func() error) {
+	later = append(later, f)
+}
+
+func RunLaterFuncs() {
+	for _, f := range later {
+		if err := f(); err != nil {
+			log.Fatal(err)
+		}
+	}
+}
