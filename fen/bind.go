@@ -14,7 +14,7 @@ func File[T any](key string) func(fiber.Ctx) (*multipart.FileHeader, error) {
 	}
 }
 
-func Local[T any](key string) func(fiber.Ctx) (T, error) {
+func Local[T any](key any) func(fiber.Ctx) (T, error) {
 	return func(ctx fiber.Ctx) (T, error) {
 		v := fiber.Locals[T](ctx, key)
 		return v, nil
