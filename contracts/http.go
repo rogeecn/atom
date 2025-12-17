@@ -7,4 +7,6 @@ import (
 type HttpRoute interface {
 	Register(fiber.Router)
 	Name() string
+	Path() string
+	Middlewares() []any
 }
